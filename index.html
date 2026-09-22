@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetstack — Terminal Only</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
+
+    <style>
+        :root {
+            --bg-primary: #050505;
+            --text-primary: #c9d1d9;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .glass-terminal {
+            width: 90vw;
+            max-width: 900px;
+            height: 80vh;
+            max-height: 600px;
+            background-color: rgba(5, 7, 10, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(91, 122, 158, 0.3);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+
+        .term-header {
+            background-color: rgba(2, 3, 5, 0.9);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(91, 122, 158, 0.2);
+            flex-shrink: 0;
+        }
+
+        .term-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .term-buttons span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .term-buttons span:nth-child(1) { background-color: #ff5f56; }
+        .term-buttons span:nth-child(2) { background-color: #ffbd2e; }
+        .term-buttons span:nth-child(3) { background-color: #27c93f; }
+
+        .term-title {
+            flex: 1;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #b1bac4;
+            letter-spacing: 0.05em;
+        }
+
+        .copy-btn {
+            background: rgba(91, 122, 158, 0.15);
+            border: 1px solid rgba(91, 122, 158, 0.4);
+            color: #b1bac4;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 0.08em;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+            user-select: none;
+        }
+        .copy-btn:hover {
+            background: rgba(91, 122, 158, 0.3);
+            color: #c9d1d9;
+        }
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+        .copy-btn.copied {
+            background: rgba(39, 201, 63, 0.18);
+            border-color: rgba(39, 201, 63, 0.6);
+            color: #27c93f;
+        }
+
+        /* Screen container for xterm.js */
+        #screen {
+            flex: 1;
+            background: #000;
+            outline: none;
+            overflow: hidden;
+            padding: 6px 8px;
+            cursor: text;
+        }
+
+        /* xterm.js selection colour so it's visible on dark bg */
+        .xterm .xterm-selection div {
+            background-color: rgba(91, 122, 158, 0.45) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="gh-terminal" class="glass-terminal">
+        <div class="term-header">
+            <div class="term-buttons">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="term-title">root@tetstack-core:~ (i386 &middot; busybox &middot; real kernel)</div>
+            <button id="copy-btn" class="copy-btn" type="button"
+                    title="Copy full terminal contents (Ctrl+Shift+C)">COPY</button>
+        </div>
+        <div id="screen" tabindex="0"></div>
+    </div>
+
+    <!-- Load xterm.js and addons -->
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const screen   = document.getElementById('screen');
+            const copyBtn  = document.getElementById('copy-btn');
+
+            const term = new Terminal({
+                fontFamily: "'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace",
+                fontSize: 14,
+                cursorBlink: true,
+                scrollback: 10000,
+                convertEol: true,
+                theme: {
+                    background: '#050505',
+                    foreground: '#c9d1d9',
+                    cursor: '#c9d1d9',
+                    selectionBackground: 'rgba(91, 122, 158, 0.45)'
+                }
+            });
+
+            const fitAddon = new FitAddon.FitAddon();
+            term.loadAddon(fitAddon);
+            term.open(screen);
+            fitAddon.fit();
+
+            window.addEventListener('resize', () => fitAddon.fit());
+
+
+
+            function getTerminalText() {
+                const buf = term.buffer.active;
+                const lines = [];
+                for (let i = 0; i < buf.length; i++) {
+                    const line = buf.getLine(i);
+                    if (line) lines.push(line.translateToString(true));
+                }
+                while (lines.length && lines[lines.length - 1] === '') lines.pop();
+                return lines.join('\n');
+            }
+
+            function legacyCopy(text) {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.setAttribute('readonly', '');
+                ta.style.position = 'fixed';
+                ta.style.top = '0';
+                ta.style.left = '0';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                ta.setSelectionRange(0, ta.value.length);
+                let ok = false;
+                try { ok = document.execCommand('copy'); } catch (_) { ok = false; }
+                document.body.removeChild(ta);
+                return ok;
+            }
+
+            function copyTerminal() {
+                const selection = term.getSelection();
+                const text = selection && selection.length ? selection : getTerminalText();
+
+                const onSuccess = () => {
+                    const original = copyBtn.textContent;
+                    copyBtn.textContent = 'COPIED';
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.textContent = original;
+                        copyBtn.classList.remove('copied');
+                    }, 1200);
+                };
+
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
+                        if (legacyCopy(text)) onSuccess();
+                    });
+                } else {
+                    if (legacyCopy(text)) onSuccess();
+                }
+            }
+
+            copyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                copyTerminal();
+                term.focus();
+            });
+
+            term.attachCustomKeyEventHandler((e) => {
+                if (e.type === 'keydown' && e.ctrlKey && e.shiftKey
+                    && (e.key === 'C' || e.key === 'c')) {
+                    copyTerminal();
+                    return false;
+                }
+                return true;
+            });
+
+            const s = document.createElement('script');
+            s.src = 'v86_assets/libv86.js';
+            s.onload = () => {
+                const V86Ctor = window.V86 || window.V86Starter;
+                if (!V86Ctor) {
+                    console.error('[tetstack] libv86.js loaded but no V86 constructor found');
+                    return;
+                }
+
+                const emulator = new V86Ctor({
+                    wasm_path: 'v86_assets/v86.wasm',
+                    memory_size: 128 * 1024 * 1024,
+                    vga_memory_size: 2 * 1024 * 1024,
+
+                    bios:     { url: 'v86_assets/seabios.bin', async: true },
+                    vga_bios: { url: 'v86_assets/vgabios.bin', async: true },
+                    bzimage:  { url: 'v86_assets/buildroot-bzimage68_latest.bin', async: true },
+                    initrd:   { url: 'v86_assets/initramfs.cpio.gz', async: true },
+
+                    cmdline: 'console=ttyS0,115200 ' +
+                             'earlycon=uart8250,io,0x3f8,115200n8 ' +
+                             'earlyprintk=serial,ttyS0,115200 ' +
+                             'rdinit=/init acpi=off noapic',
+
+                    disable_speaker: true,
+                    autostart: true,
+                });
+
+                window.__tetstack = { emulator };
+
+                emulator.add_listener('serial0-output-byte', (byte) => {
+                    const char = String.fromCharCode(byte);
+                    if (char !== '\r') term.write(char);
+                });
+
+                term.onData((data) => {
+                    for (let i = 0; i < data.length; i++) {
+                        emulator.serial0_send(data[i]);
+                    }
+                });
+
+                term.focus();
+            };
+
+            s.onerror = () => {
+                console.error('[tetstack] failed to load v86_assets/libv86.js');
+                term.write('\r\n[error] Failed to load v86 library.\r\n');
+            };
+            document.head.appendChild(s);
+        });
+    </script>
+</body>
+</html>
