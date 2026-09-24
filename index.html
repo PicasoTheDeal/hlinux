@@ -3,195 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Welcome to my slice of the internet. I'm PicasoTheDealer—check out my latest coding projects, designs, and digital experiments.">
-    <title>Tetstack — Portfolio</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <meta name="description" content="A real Linux kernel running in your browser via WebAssembly. i386, BusyBox, serial console — no servers, no containers, just v86 and a WebAssembly emulator.">
+    <meta name="author" content="Kirubel (PicasoTheDeal)">
+    <meta name="keywords" content="linux, v86, webassembly, wasm, browser linux, x86 emulator, busybox, kernel, terminal, serial console, javascript">
+    <meta name="theme-color" content="#050505">
+    <meta name="color-scheme" content="dark">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Tetstack">
+    <meta property="og:title" content="hlinux — A Real Linux Kernel in Your Browser">
+    <meta property="og:description" content="Boots a real i386 Linux kernel inside a WebAssembly x86 emulator. Serial console, BusyBox userspace, zero backend.">
+    <meta property="og:url" content="https://tetstack.dev/hlinux/">
+    <meta property="og:image" content="https://tetstack.dev/hlinux/assets/og-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A dark terminal window showing the hlinux boot log scrolling past.">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@PicasoTheDeal">
+    <meta name="twitter:creator" content="@PicasoTheDeal">
+    <meta name="twitter:title" content="hlinux — A Real Linux Kernel in Your Browser">
+    <meta name="twitter:description" content="Boots a real i386 Linux kernel inside a WebAssembly x86 emulator. Serial console, BusyBox userspace, zero backend.">
+    <meta name="twitter:image" content="https://tetstack.dev/hlinux/assets/og-preview.png">
+    <meta name="twitter:image:alt" content="A dark terminal window showing the hlinux boot log scrolling past.">
+    <meta name="generator" content="Handwritten, no build step">
+    <meta name="rating" content="general">
+    <link rel="canonical" href="https://tetstack.dev/hlinux/">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23050505'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' fill='%235b7a9e' text-anchor='middle'%3E%26gt;_%3C/text%3E%3C/svg%3E">
+    <title>hlinux</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
 
     <style>
         :root {
             --bg-primary: #050505;
-            --bg-deeper: #020202;
-            --bg-elevated: rgba(15, 15, 15, 0.7);
-            --border-default: rgba(28, 35, 51, 0.6);
-            --border-subtle: rgba(22, 29, 40, 0.5);
-            --text-primary: #e6edf3;
-            --text-secondary: #b1bac4;
-            --text-tertiary: #8b949e;
-            --accent: #5b7a9e;
-            --accent-glow: #7ca1cc;
-            --accent-subtle: #3d5068;
+            --text-primary: #c9d1d9;
             --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
-            --track-width: 340px;
-            --left-col-max: 720px;
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: geometricPrecision;
-            background-color: var(--bg-primary);
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            background-color: transparent;
+            background-color: var(--bg-primary);
             color: var(--text-primary);
             font-family: var(--font-mono);
-            line-height: 1.6;
-            min-height: 100vh;
-            letter-spacing: -0.01em;
-            counter-reset: project-counter;
-        }
-
-        #webgl-universe {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .page-wrapper {
-            position: relative;
-            z-index: 1;
-            max-width: 1340px;
-            margin: 0 auto;
-            padding: 0 48px;
-            background: linear-gradient(to right, rgba(5,5,5,0.85) 0%, rgba(5,5,5,0.4) 50%, rgba(5,5,5,0.85) 100%);
-            box-shadow: 0 0 100px rgba(0,0,0,0.8);
-        }
-
-        .hero { padding: 80px 0 56px; position: relative; }
-
-        .hero-overline {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--accent-glow);
-            margin-bottom: 20px;
-            display: block;
-            text-shadow: 0 0 10px rgba(91, 122, 158, 0.5);
-        }
-
-        .hero-name {
-            font-family: "Press Start 2P", system-ui;
-            font-size: clamp(1.5rem, 4.6vw, 3.5rem);
-            font-weight: 400;
-            letter-spacing: -0.025em;
-            line-height: 1.05;
-            color: var(--text-primary);
-            margin-bottom: 18px;
-            position: relative;
-            display: inline-block;
-            text-shadow: 4px 4px 0px rgba(91, 122, 158, 0.2), -2px -2px 10px rgba(255,255,255,0.1);
-        }
-
-        .hero-name::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent), transparent);
-        }
-
-        .hero-title-block { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; margin-bottom: 10px; margin-top: 6px; }
-        .hero-title { font-size: 1.15rem; font-weight: 500; color: var(--text-secondary); letter-spacing: -0.005em; }
-
-        .hero-location {
-            font-size: 0.85rem;
-            font-weight: 400;
-            color: var(--text-tertiary);
-            font-family: var(--font-mono);
-            letter-spacing: 0.03em;
-            white-space: nowrap;
-        }
-
-        .hero-location::before { content: '// '; color: var(--accent); opacity: 0.8; text-shadow: 0 0 5px var(--accent); }
-
-        .hero-contact-row { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 14px; align-items: center; }
-
-        .hero-contact-link {
-            font-family: var(--font-mono);
-            font-size: 0.78rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            text-decoration: none;
-            letter-spacing: 0.02em;
-            display: inline-flex;
+            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 6px;
-            padding: 4px 0;
-            border-bottom: 1px solid transparent;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            min-height: 100vh;
+            overflow: hidden;
         }
-
-        .hero-contact-link:hover { color: #fff; border-bottom-color: var(--accent); text-shadow: 0 0 8px rgba(255,255,255,0.4); transform: translateY(-2px); }
-        .hero-contact-link i { font-size: 0.85rem; color: var(--text-tertiary); transition: color 0.2s ease; }
-        .hero-contact-link:hover i { color: var(--accent-glow); }
-        .hero-contact-sep { color: var(--border-default); font-size: 0.7rem; user-select: none; }
-
-        .narrative-section { margin-top: 36px; padding-top: 28px; max-width: 65%; }
-
-        .narrative-label {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--accent-glow);
-            margin-bottom: 12px;
-            display: block;
-        }
-
-        .narrative-text { font-size: 0.95rem; font-weight: 400; line-height: 1.75; color: var(--text-secondary); letter-spacing: 0.005em; margin-bottom: 16px; }
-        .narrative-author { color: var(--text-primary); font-weight: 600; }
 
         .glass-terminal {
-            margin-top: 32px;
-            width: 100%;
+            width: 90vw;
             max-width: 900px;
-            height: 460px;
-            background-color: rgba(3, 5, 8, 0.92);
-            border: 1px solid rgba(91, 122, 158, 0.35);
+            height: 80vh;
+            max-height: 600px;
+            background-color: rgba(5, 7, 10, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(91, 122, 158, 0.3);
             border-radius: 8px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(91, 122, 158, 0.05), 0 0 60px rgba(91, 122, 158, 0.08);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
             position: relative;
-            transition: border-color 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .glass-terminal.is-focused {
-            border-color: rgba(124, 161, 204, 0.85);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(91, 122, 158, 0.12), 0 0 60px rgba(91, 122, 158, 0.3);
         }
 
         .term-header {
-            background-color: rgba(2, 3, 5, 0.95);
+            background-color: rgba(2, 3, 5, 0.9);
             padding: 10px 14px;
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 1px solid rgba(91, 122, 158, 0.25);
+            border-bottom: 1px solid rgba(91, 122, 158, 0.2);
             flex-shrink: 0;
         }
 
-        .term-buttons { display: flex; gap: 8px; }
-        .term-buttons span { width: 12px; height: 12px; border-radius: 50%; background-color: #5d6670; opacity: 0.7; transition: opacity 0.2s; }
-        .glass-terminal:hover .term-buttons span { opacity: 1; }
+        .term-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .term-buttons span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
         .term-buttons span:nth-child(1) { background-color: #ff5f56; }
         .term-buttons span:nth-child(2) { background-color: #ffbd2e; }
         .term-buttons span:nth-child(3) { background-color: #27c93f; }
@@ -199,915 +103,109 @@
         .term-title {
             flex: 1;
             text-align: center;
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            color: var(--text-secondary);
+            font-size: 0.75rem;
+            color: #b1bac4;
             letter-spacing: 0.05em;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
-        .term-copy-btn {
-            flex-shrink: 0;
+        .copy-btn {
             background: rgba(91, 122, 158, 0.15);
             border: 1px solid rgba(91, 122, 158, 0.4);
             color: #b1bac4;
             font-family: var(--font-mono);
-            font-size: 0.66rem;
-            font-weight: 600;
-            padding: 4px 11px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 4px 10px;
             border-radius: 4px;
             cursor: pointer;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.08em;
             transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
             user-select: none;
         }
-        .term-copy-btn:hover { background: rgba(91, 122, 158, 0.32); color: #e6edf3; }
-        .term-copy-btn:active { transform: translateY(1px); }
-        .term-copy-btn.copied { background: rgba(39, 201, 63, 0.18); border-color: rgba(39, 201, 63, 0.6); color: #27c93f; }
+        .copy-btn:hover {
+            background: rgba(91, 122, 158, 0.3);
+            color: #c9d1d9;
+        }
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+        .copy-btn.copied {
+            background: rgba(39, 201, 63, 0.18);
+            border-color: rgba(39, 201, 63, 0.6);
+            color: #27c93f;
+        }
 
-        .term-screen {
+        #screen {
             flex: 1;
             background: #000;
-            padding: 8px 12px;
+            outline: none;
             overflow: hidden;
-            min-height: 0;
-            position: relative;
-            isolation: isolate;
+            padding: 6px 8px;
+            cursor: text;
         }
 
-        .term-screen .xterm .xterm-selection div { background-color: rgba(91, 122, 158, 0.45) !important; }
-
-        .term-screen .xterm .xterm-viewport {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(91, 122, 158, 0.45) transparent;
-            background-color: transparent !important;
-        }
-        .term-screen .xterm .xterm-viewport::-webkit-scrollbar { width: 10px; }
-        .term-screen .xterm .xterm-viewport::-webkit-scrollbar-track { background: transparent; }
-        .term-screen .xterm .xterm-viewport::-webkit-scrollbar-thumb {
-            background: rgba(91, 122, 158, 0.35);
-            border-radius: 5px;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-        }
-        .term-screen .xterm .xterm-viewport::-webkit-scrollbar-thumb:hover {
-            background: rgba(91, 122, 158, 0.65);
-            background-clip: padding-box;
-        }
-
-        .term-status {
-            flex-shrink: 0;
-            background: rgba(2, 3, 5, 0.95);
-            border-top: 1px solid rgba(91, 122, 158, 0.2);
-            padding: 6px 14px;
-            font-family: var(--font-mono);
-            font-size: 0.66rem;
-            color: var(--text-tertiary);
-            letter-spacing: 0.06em;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .term-status .live-dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #3fb950;
-            box-shadow: 0 0 8px #3fb950;
-            margin-right: 6px;
-            vertical-align: middle;
-            animation: pulse-dot 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 0.35; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        .focus-indicator {
-            padding: 2px 9px;
-            border-radius: 3px;
-            font-family: var(--font-mono);
-            font-size: 0.62rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            white-space: nowrap;
-            transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        .focus-indicator.page-mode { color: var(--accent-glow); background: rgba(91, 122, 158, 0.12); border: 1px solid rgba(91, 122, 158, 0.3); }
-        .focus-indicator.terminal-mode { color: #3fb950; background: rgba(63, 185, 80, 0.12); border: 1px solid rgba(63, 185, 80, 0.45); box-shadow: 0 0 10px rgba(63, 185, 80, 0.25); }
-
-        .term-ctx-menu {
-            position: fixed;
-            z-index: 99999;
-            background: rgba(10, 14, 20, 0.98);
-            border: 1px solid rgba(91, 122, 158, 0.55);
-            border-radius: 6px;
-            padding: 5px;
-            display: flex;
-            flex-direction: column;
-            min-width: 180px;
-            box-shadow: 0 12px 32px rgba(0,0,0,0.85), 0 0 0 1px rgba(0,0,0,0.6), 0 0 24px rgba(91,122,158,0.15);
-            font-family: var(--font-mono);
-            font-size: 0.74rem;
-            user-select: none;
-        }
-        .term-ctx-menu button {
-            background: transparent;
-            border: none;
-            color: #c9d1d9;
-            text-align: left;
-            padding: 8px 14px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: inherit;
-            letter-spacing: 0.04em;
-            transition: background 0.1s ease, color 0.1s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            white-space: nowrap;
-        }
-        .term-ctx-menu button:hover { background: rgba(91, 122, 158, 0.38); color: #fff; }
-        .term-ctx-menu button:active { background: rgba(91, 122, 158, 0.55); }
-        .term-ctx-menu button .ctx-shortcut { font-size: 0.62rem; color: var(--text-tertiary); letter-spacing: 0.05em; }
-        .term-ctx-menu button.disabled { color: var(--text-tertiary); opacity: 0.4; pointer-events: none; }
-        .term-ctx-menu .ctx-separator { height: 1px; background: rgba(91, 122, 158, 0.2); margin: 4px 6px; }
-
-        #v86-hidden-screen {
-            position: absolute !important;
-            left: -9999px !important;
-            top: -9999px !important;
-            width: 1px !important;
-            height: 1px !important;
-            overflow: hidden !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
-            opacity: 0 !important;
-        }
-
-        .blog-preview-card, .chaos-stream-container, .project-block {
-            background-color: rgba(11, 11, 11, 0.6);
-            border: 1px solid var(--border-default);
-            border-radius: 6px;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .blog-preview-card { padding: 24px; margin: 20px 0; max-width: 480px; position: relative; }
-
-        .blog-preview-card:hover, .chaos-stream-container:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 25px rgba(91, 122, 158, 0.15), inset 0 0 10px rgba(91, 122, 158, 0.05);
-            transform: translateY(-2px);
-        }
-
-        .card-terminal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px; margin-bottom: 16px; }
-        .feed-label { font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.1em; }
-
-        .live-pulse {
-            width: 8px;
-            height: 8px;
-            background-color: #3fb950;
-            border-radius: 50%;
-            box-shadow: 0 0 12px #3fb950;
-            animation: beaconPulse 1.8s infinite ease-in-out;
-        }
-
-        @keyframes beaconPulse {
-            0% { transform: scale(0.9); opacity: 0.4; }
-            50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 20px #3fb950; }
-            100% { transform: scale(0.9); opacity: 0.4; }
-        }
-
-        .scanning-status { font-size: 0.85rem; color: var(--text-tertiary); padding: 8px 0; }
-        .node-meta { font-size: 0.7rem; color: var(--text-tertiary); display: block; margin-bottom: 8px; }
-        .tag-highlight { color: var(--accent-glow); font-weight: 600; margin-right: 6px; text-shadow: 0 0 5px rgba(91,122,158,0.4); }
-        .node-title { font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; line-height: 1.4; }
-        .node-excerpt { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .node-action-btn { font-size: 0.75rem; color: var(--accent); text-decoration: none; font-weight: 500; display: inline-block; transition: color 0.2s ease, text-shadow 0.2s ease; }
-        .node-action-btn:hover { color: #fff; text-shadow: 0 0 8px var(--accent); }
-        .telemetry-payload-hidden { display: none; }
-
-        .main-grid { display: grid; grid-template-columns: 1fr var(--track-width); gap: 0; position: relative; }
-        .left-column { padding: 48px 0 80px; padding-right: 56px; max-width: var(--left-col-max); }
-
-        .right-column {
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            overflow: hidden;
-            background-color: transparent;
-            margin-left: -1px;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .section-label {
-            font-family: var(--font-mono);
-            font-size: 0.68rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--text-primary);
-            margin-bottom: 28px;
-            display: block;
-            position: relative;
-            padding-left: 14px;
-            text-shadow: 0 0 10px rgba(255,255,255,0.2);
-        }
-        .section-label.no-pad { padding-left: 0; }
-        .section-label::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 14px;
-            background-color: var(--accent-glow);
-            box-shadow: 0 0 8px var(--accent-glow);
-        }
-        .section-label.no-pad::before { display: none; }
-
-        .commit-calendar-img { width: 100%; max-width: 800px; height: auto; border-radius: 8px; border: 1px solid var(--border-default); background: rgba(0, 0, 0, 0.5); padding: 10px; margin-bottom: 40px; }
-
-        .project-block {
-            position: relative;
-            padding: 24px;
-            border: 1px solid transparent;
-            border-left: 3px solid var(--border-default);
-            margin-bottom: 16px;
-            transition: all 0.3s ease;
-            counter-increment: project-counter;
-        }
-        .project-block:hover {
-            background-color: rgba(15, 20, 30, 0.4);
-            border-left-color: var(--accent);
-            border-color: rgba(91, 122, 158, 0.2);
-            border-left-width: 3px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            transform: translateX(4px);
-        }
-        .project-block::before {
-            content: '0' counter(project-counter);
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            color: rgba(255,255,255,0.1);
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            transition: color 0.3s ease;
-        }
-        .project-block:hover::before { color: var(--accent-subtle); }
-        .project-link { display: block; text-decoration: none; color: inherit; height: 100%; }
-        .project-name { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.01em; color: var(--text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
-        .project-name i { font-size: 0.8em; color: var(--text-tertiary); }
-        .project-subtitle { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 12px; text-transform: uppercase; }
-        .project-desc { font-size: 0.9rem; font-weight: 400; line-height: 1.7; color: var(--text-secondary); letter-spacing: 0.005em; }
-
-        .gallery-section { margin-top: 44px; padding-top: 28px; }
-        .gallery-desc { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 24px; }
-        .poster-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-
-        .poster-card {
-            border: 1px solid var(--border-default);
-            background-color: var(--bg-elevated);
-            overflow: hidden;
-            border-radius: 6px;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            height: 100%;
-        }
-        .poster-card:hover { border-color: var(--accent); transform: scale(1.03) translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.6), 0 0 20px rgba(91,122,158,0.2); z-index: 10; }
-        .poster-card img { width: 100%; object-fit: contain; display: block; height: auto; transition: opacity 0.3s ease, filter 0.3s ease; filter: brightness(0.85) contrast(1.1); }
-        .poster-card:hover img { filter: brightness(1.1) contrast(1.1); }
-
-        .chaos-stream-container { padding: 16px; margin: 40px 0; max-width: 100%; }
-        .chaos-stream-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px; margin-bottom: 14px; }
-        .chaos-stream-label { font-size: 0.72rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
-        .chaos-stream-label i { margin-right: 6px; color: var(--accent-glow); }
-
-        .chaos-live-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.6rem;
-            color: #3fb950;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            background: rgba(63, 185, 80, 0.1);
-            padding: 4px 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(63, 185, 80, 0.3);
-            box-shadow: 0 0 10px rgba(63, 185, 80, 0.2);
-        }
-
-        .chaos-iframe { width: 100%; height: 480px; border: 1px solid rgba(255,255,255,0.05) !important; background: #000; display: block; pointer-events: none; border-radius: 4px; }
-        .chaos-stream-footer { display: flex; flex-wrap: wrap; gap: 16px 24px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
-        .chaos-stream-info { font-size: 0.65rem; color: var(--text-tertiary); letter-spacing: 0.04em; display: flex; align-items: center; gap: 6px; }
-        .chaos-stream-info i { color: var(--accent); }
-        .chaos-view-full-btn { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s ease; }
-
-        .experience-section { margin-top: 44px; padding-top: 28px; }
-        .experience-block { position: relative; padding: 24px 0 24px 24px; border-left: 2px solid var(--border-default); transition: border-left-color 0.25s ease; }
-        .experience-block:hover { border-left-color: var(--accent-glow); }
-        .experience-role { font-size: 1.15rem; font-weight: 600; color: var(--text-primary); }
-        .experience-company { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 500; color: var(--accent); margin-bottom: 2px; display: block; }
-        .experience-dates { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-tertiary); margin-bottom: 10px; display: block; }
-
-        .track-header { flex-shrink: 0; padding: 20px 20px 14px; background-color: transparent; z-index: 3; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .track-header-label { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-primary); display: flex; align-items: center; gap: 8px; text-shadow: 0 0 8px rgba(255,255,255,0.3); }
-        .track-pulse { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: var(--accent-glow); box-shadow: 0 0 8px var(--accent-glow); animation: pulse-dot 2s ease-in-out infinite; }
-
-        .scroll-track-outer {
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
-            mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
-            background: rgba(10, 10, 10, 0.4);
-            border-left: 1px solid rgba(255,255,255,0.02);
-        }
-
-        .scroll-track-inner { animation: scrollTrackVertical 35s linear infinite; padding: 20px 16px; will-change: transform; }
-        .scroll-track-inner:hover { animation-play-state: paused; }
-
-        @keyframes scrollTrackVertical { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
-
-        .track-category {
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: var(--accent);
-            padding: 18px 8px 8px 8px;
-            border-bottom: 1px solid var(--border-subtle);
-            margin-bottom: 12px;
-        }
-
-        .track-item { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 4px; transition: all 0.2s ease; cursor: default; margin-bottom: 4px; }
-        .track-item:hover { background-color: rgba(91, 122, 158, 0.15); transform: translateX(4px); }
-        .track-item i { font-size: 1.1rem; color: var(--text-tertiary); width: 22px; text-align: center; flex-shrink: 0; transition: color 0.2s ease, transform 0.2s; }
-        .track-item:hover i { color: var(--accent-glow); transform: scale(1.2); text-shadow: 0 0 10px var(--accent-glow); }
-        .track-item span { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; transition: color 0.2s ease; }
-        .track-item:hover span { color: #fff; }
-
-        .page-footer { padding: 30px 0; border-top: 1px solid var(--border-subtle); text-align: left; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-tertiary); letter-spacing: 0.05em; }
-        .page-footer span { color: var(--accent-glow); font-weight: bold; }
-
-        @media (max-width: 1100px) {
-            .main-grid { grid-template-columns: 1fr 280px; }
-            :root { --track-width: 280px; }
-            .left-column { padding-right: 36px; }
-        }
-        @media (max-width: 768px) {
-            .page-wrapper { padding: 0 20px; }
-            .main-grid { grid-template-columns: 1fr; }
-            .left-column { padding-right: 0; max-width: 100%; }
-            .right-column { position: relative; height: 420px; border: 1px solid var(--border-default); margin-bottom: 40px; }
-            .poster-grid { grid-template-columns: repeat(2, 1fr); }
-            .narrative-section { max-width: 100%; }
-            .glass-terminal { height: 380px; }
-            .focus-indicator { display: none; }
-        }
-        @media (max-width: 480px) {
-            .poster-grid { grid-template-columns: 1fr; }
+        .xterm .xterm-selection div {
+            background-color: rgba(91, 122, 158, 0.45) !important;
         }
     </style>
 </head>
 <body>
-    <div id="webgl-universe"></div>
 
-    <div class="page-wrapper">
-        <header class="hero">
-            <span class="hero-overline">Portfolio / Dossier</span>
-            <h1 class="hero-name">Tetstack</h1>
-            <div class="hero-title-block">
-                <span class="hero-title">Cybersecurity Researcher / Systems Engineer / Software Developer / Digital Designer</span>
+    <div id="gh-terminal" class="glass-terminal">
+        <div class="term-header">
+            <div class="term-buttons">
+                <span></span><span></span><span></span>
             </div>
-            <span class="hero-location">Addis Ababa, Ethiopia &mdash; Open to Remote</span>
-            <div class="hero-contact-row">
-                <a href="mailto:picasothedeal.com@gmail.com" class="hero-contact-link">
-                    <i class="bi bi-envelope"></i> picasothedealer.com@gmail.com
-                </a>
-                <span class="hero-contact-sep">|</span>
-                <a href="https://github.com/PicasoTheDeal" target="_blank" rel="noopener noreferrer" class="hero-contact-link">
-                    <i class="bi bi-github"></i> github.com/PicasoTheDeal
-                </a>
-                 <span class="hero-contact-sep">|</span>
-                <a href="https://t.me/Tetstack" target="_blank" rel="noopener noreferrer" class="hero-contact-link">
-                    <i class="bi bi-telegram"></i> Telegram Channel
-                </a>
-                <span class="hero-contact-sep">|</span>
-                <a href="assets/CV.pdf" target="_blank" class="hero-contact-link">
-                    <i class="bi bi-file-earmark-text"></i> curl_dossier[CV]
-                </a>
-            </div>
-
-            <div class="narrative-section">
-                <span class="narrative-label">&gt; whoami</span><p class="narrative-text narrative-author">(Kirubel)</p>
-                <p class="narrative-text">
-                    Sup, I am a security researcher and a software engineer, I love to break
-                    things and just see how and to what level they function. I mostly focus on
-                    Offensive security at low-level to check if I can get buffer overflow on the
-                    software and develop apps, websites, and APIs. On my free time, I try to make
-                    some digital arts like 3D designs, posters and drawings.
-                </p>
-            </div>
-
-            <div class="glass-terminal" id="gh-terminal">
-                <div class="term-header">
-                    <div class="term-buttons">
-                        <span></span><span></span><span></span>
-                    </div>
-                    <div class="term-title">root@tetstack-core:~ (i386 &middot; busybox &middot; real kernel)</div>
-                    <button id="term-copy-btn" class="term-copy-btn" type="button"
-                            title="Copy selection, or entire terminal buffer">COPY</button>
-                </div>
-                <div id="v86-screen" class="term-screen"></div>
-                <div class="term-status">
-                    <span id="v86-status"><span class="live-dot"></span>awaiting operator</span>
-                    <span id="focus-indicator" class="focus-indicator page-mode">PAGE SCROLL &middot; click terminal to type</span>
-                </div>
-                <div id="v86-hidden-screen" aria-hidden="true"></div>
-            </div>
-        </header>
-
-        <div class="main-grid">
-
-            <section class="left-column">
-                <span class="section-label no-pad">
-                    <img
-                      src="https://raw.githubusercontent.com/PicasoTheDeal/PicasoTheDeal/main/metrics.plugin.isocalendar.svg"
-                      alt="PicasoTheDeal's Isometric Commit Calendar"
-                      class="commit-calendar-img"
-                    >
-                </span>
-                <span class="section-label">Core Projects</span>
-
-                <div class="blog-preview-card">
-                    <div class="card-terminal-header">
-                        <span class="feed-label"><i class="bi bi-broadcast"></i> Live Log Stream</span>
-                        <span class="live-pulse"></span>
-                    </div>
-
-                    <div id="blog-telemetry-status" class="scanning-status">[ querying remote log manifest... ]</div>
-
-                    <div id="blog-telemetry-payload" class="telemetry-payload-hidden">
-                        <span class="node-meta">
-                            <span id="blog-node-tag" class="tag-highlight"></span>
-                            <span id="blog-node-meta-details"></span>
-                        </span>
-                        <h3 id="blog-node-title" class="node-title">Loading...</h3>
-                        <p id="blog-node-excerpt" class="node-excerpt"></p>
-                        <a href="#" id="blog-node-link" target="_blank" class="node-action-btn">Connect to Frame Node ──►</a>
-                    </div>
-                </div>
-
-                <article class="project-block">
-                    <a href="https://github.com/PicasoTheDeal/SAUR" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <h2 class="project-name">SAUR <i class="bi bi-github"></i></h2>
-                        <p class="project-subtitle">Security Analysis &amp; Threat Engine</p>
-                        <p class="project-desc">
-                            A fast system auditor that scans files and memory for bad actors, credential leaks, and
-                            malicious payloads using AVX2 vector instructions, YARA rulesets, and live URLhaus indicator feeds.
-                            Features hardware-accelerated signature scanning, Google RE2 pattern matching, and deep recursive
-                            filesystem analysis.
-                        </p>
-                    </a>
-                </article>
-
-                <article class="project-block">
-                    <a href="https://github.com/PicasoTheDeal/Threat-Matrix" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <h2 class="project-name">Threat-Matrix <i class="bi bi-github"></i></h2>
-                        <p class="project-subtitle">Serverless Edge-Native Threat Intelligence Dashboard</p>
-                        <p class="project-desc">
-                            A serverless, edge-native dashboard that aggregates live CVEs, exploits, and security news
-                            into a single stream. Built entirely on Cloudflare Workers and D1 for sub-millisecond latency
-                            without traditional backend bloat. It features a zero-trust, completely anonymous authentication
-                            model requiring a strict 128-character cryptographic passphrase, guaranteeing full user privacy with
-                            zero ad tracking.
-                        </p>
-                    </a>
-                </article>
-
-                <article class="project-block">
-                    <a href="https://github.com/PicasoTheDeal/dSBOM-engine" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <h2 class="project-name">dSBOM <i class="bi bi-github"></i></h2>
-                        <p class="project-subtitle">Dynamic runtime SBOM generator for Linux</p>
-                        <p class="project-desc">
-                            Non-invasive runtime Software Bill of Materials (SBOM) generation engine. The system
-                            derives component identity, linkage, and cryptographic integrity assertions natively
-                            from the Linux kernel virtual filesystem (VFS) and tracer subsystems, eliminating
-                            userspace injection, application instrumentation, or static manifest approximation.
-                        </p>
-                    </a>
-                </article>
-
-                <article class="project-block">
-                    <a href="https://github.com/PicasoTheDeal/ZeroShadow" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <h2 class="project-name">ZeroShadow <i class="bi bi-github"></i></h2>
-                        <p class="project-subtitle">Lightweight ELF Tracing &amp; Instrumentation Engine</p>
-                        <p class="project-desc">
-                            ZeroShadow is a lightweight C++ engine for tracing and instrumenting ELF binaries.
-                            It gives you raw, low-level visibility into how a program runs, allowing you
-                            to hook functions, trace execution paths, and analyze binaries without
-                            the bloat of heavy runtimes. Built for both CLI analysis and direct
-                            integration into your own tools as a library.
-                        </p>
-                    </a>
-                </article>
-
-                <article class="project-block">
-                    <a href="https://github.com/PicasoTheDeal/KASCVE" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <h2 class="project-name">Project KASCVE <i class="bi bi-github"></i></h2>
-                        <p class="project-subtitle">Automated Security Auditing Ecosystem &amp; Penetration Tester</p>
-                        <p class="project-desc">
-                            KASCVE is an automated security audit software for websites that tests your website for known CVE'S
-                            and Top 10 OWASP vulnerability with an addition of active penetration test such as SQL Injection and
-                            some others. A platform made for both desktop and android.
-                        </p>
-                    </a>
-                </article>
-
-                <article class="project-block">
-                    <a href="https://github.com/PicasoTheDeal/AUR-scanner" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <h2 class="project-name">AUR-scanner <i class="bi bi-github"></i></h2>
-                        <p class="project-subtitle">Offline Static Analysis Utility</p>
-                        <p class="project-desc">
-                            A lightweight offline static analysis tool to scan local ALPM metadata and AUR helper
-                            build caches for heuristic anomalies and known threat signatures.
-                        </p>
-                    </a>
-                </article>
-
-                <article class="project-block">
-                    <a href="https://github.com/PicasoTheDeal/KiOS" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <h2 class="project-name">KiOS <i class="bi bi-github"></i></h2>
-                        <p class="project-subtitle">Secure Linux Architecture</p>
-                        <p class="project-desc">
-                            Architected a highly optimized, Arch-based Linux distribution engineered from the kernel up to
-                            drastically reduce attack surfaces while maintaining maximum developer velocity. Developed custom
-                            Python and Bash automation frameworks to handle system localization, automated provisioning
-                            pipelines, and granular cryptographic storage layouts.
-                        </p>
-                    </a>
-                </article>
-
-                <article class="project-block">
-                    <a href="https://github.com/PicasoTheDeal/telegram-rlottie-vulnerability" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <h2 class="project-name">Zero-Day Enumeration <i class="bi bi-github"></i></h2>
-                        <p class="project-subtitle">rlottie Media Engine Fuzzing Research</p>
-                        <p class="project-desc">
-                            Independent remote research focused on stress-testing the rlottie media engine. Engineered an
-                            automated fuzzing harness utilizing AFL++ to execute systematic crash analysis, successfully
-                            isolating potential memory corruption vulnerabilities, input validation failures, and hidden
-                            memory leaks within third-party messaging integrations.
-                        </p>
-                    </a>
-                </article>
-
-                <article class="project-block">
-                    <a href="https://github.com/PicasoTheDeal/The-Donut" target="_blank" rel="noopener noreferrer" class="project-link">
-                        <h2 class="project-name">The-Donut <i class="bi bi-github"></i></h2>
-                        <p class="project-subtitle">Terminal-Based 3D Rendering Engine in C++</p>
-                        <p class="project-desc">
-                            Implementing a 3D donut animation rendered entirely in the terminal
-                            using C++. Developed raw mathematical rendering algorithms and strict memory management
-                            constraints without relying on external graphical or rendering libraries.
-                        </p>
-                    </a>
-                </article>
-
-                <div class="gallery-section">
-                    <span class="section-label">Graphic &amp; Poster Design Gallery</span>
-                    <p class="gallery-desc">Visual explorations and digital art experiments.</p>
-                    <div class="poster-grid">
-                        <div class="poster-card"><img src="assets/image-02.jpg" alt="Poster Design 02" loading="lazy"></div>
-                        <div class="poster-card"><img src="assets/image-03.jpg" alt="Poster Design 03" loading="lazy"></div>
-                        <div class="poster-card"><img src="assets/image-04.jpg" alt="Poster Design 04" loading="lazy"></div>
-                        <div class="poster-card"><img src="assets/image-07.jpg" alt="Poster Design 07" loading="lazy"></div>
-                    </div>
-                </div>
-
-                <div class="chaos-stream-container">
-                    <div class="chaos-stream-header">
-                        <span class="chaos-stream-label"><i class="bi bi-broadcast"></i> LIVE: CHAOS ENGINE</span>
-                        <span class="chaos-live-badge"><span class="chaos-pulse-dot"></span></span>
-                    </div>
-
-                    <iframe src="https://controlled-chaos.pages.dev/" class="chaos-iframe" title="Controlled Chaos Stream" allow="autoplay" loading="lazy"></iframe>
-
-                    <div class="chaos-stream-footer">
-                        <span class="chaos-stream-info"><i class="bi bi-cpu"></i> Unique 3D universe generated daily</span>
-                        <span class="chaos-stream-info"><i class="bi bi-dice-6"></i> Seed: <span id="chaos-seed-display">—</span></span>
-                        <span class="chaos-stream-info"><i class="bi bi-people"></i> <span id="chaos-visitor-display">—</span> visitors today</span>
-                        <span class="chaos-stream-info"><i class="bi bi-github"></i>
-                            <a href="https://github.com/PicasoTheDeal/CHAOS" target="_blank" class="chaos-view-full-btn">View Source</a>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="experience-section">
-                    <span class="section-label">Professional Experience</span>
-                    <article class="experience-block">
-                        <span class="experience-company">LaloDev</span>
-                        <h3 class="experience-role">Software Engineer</h3>
-                        <span class="experience-dates">June 2025 &mdash; November 2025</span>
-                        <p class="experience-desc">
-                            Engineered and optimized backend software architectures within a formal Software Development
-                            Life Cycle (SDLC). Automated critical production infrastructure using Python, enforcing secure
-                            version control integrity and codebase hardening. Collaborated asynchronously with distributed
-                            teams to defend application logic against injection flaws and maximize server throughput.
-                        </p>
-                    </article>
-                </div>
-            </section>
-
-            <aside class="right-column">
-                <div class="track-header">
-                    <span class="track-header-label"><span class="track-pulse"></span> Technical Stack</span>
-                </div>
-                <div class="scroll-track-outer">
-                    <div class="scroll-track-inner">
-                    <div class="track-category">Languages</div>
-                    <div class="track-item"><i class="bi bi-c-circle"></i><span>C</span></div>
-                    <div class="track-item"><i class="bi bi-cpu"></i><span>C++</span></div>
-                    <div class="track-item"><i class="bi bi-hash"></i><span>C#</span></div>
-                    <div class="track-item"><i class="bi bi-memory"></i><span>Assembly x86 / arm</span></div>
-                    <div class="track-item"><i class="bi bi-terminal"></i><span>Python</span></div>
-                    <div class="track-item"><i class="bi bi-code-square"></i><span>Go</span></div>
-                    <div class="track-item"><i class="bi bi-android2"></i><span>Kotlin</span></div>
-                    <div class="track-item"><i class="bi bi-code"></i><span>Rust</span></div>
-                    <div class="track-item"><i class="bi bi-braces"></i><span>TypeScript</span></div>
-                    <div class="track-item"><i class="bi bi-filetype-js"></i><span>JavaScript</span></div>
-                    <div class="track-item"><i class="bi bi-terminal-fill"></i><span>Bash</span></div>
-
-                    <div class="track-category">Offensive &amp; Research</div>
-                    <div class="track-item"><i class="bi bi-shield-slash"></i><span>Sliver C2</span></div>
-                    <div class="track-item"><i class="bi bi-radar"></i><span>Nmap</span></div>
-                    <div class="track-item"><i class="bi bi-incognito"></i><span>Burp Suite</span></div>
-                    <div class="track-item"><i class="bi bi-bug"></i><span>Metasploit</span></div>
-                    <div class="track-item"><i class="bi bi-shield-exclamation"></i><span>AFL++ Fuzzing</span></div>
-                    <div class="track-item"><i class="bi bi-binoculars"></i><span>Ghidra</span></div>
-                    <div class="track-item"><i class="bi bi-diagram-3"></i><span>IDA Pro</span></div>
-                    <div class="track-item"><i class="bi bi-bug-fill"></i><span>GDB / ptrace</span></div>
-                    <div class="track-item"><i class="bi bi-ethernet"></i><span>Wireshark</span></div>
-
-                    <div class="track-category">Frameworks &amp; DBs</div>
-                    <div class="track-item"><i class="bi bi-braces-asterisk"></i><span>React / Next.js</span></div>
-                    <div class="track-item"><i class="bi bi-node-plus"></i><span>Node.js</span></div>
-                    <div class="track-item"><i class="bi bi-lightning-charge"></i><span>FastAPI</span></div>
-                    <div class="track-item"><i class="bi bi-box"></i><span>Three.js / WebGL</span></div>
-                    <div class="track-item"><i class="bi bi-database"></i><span>PostgreSQL / SQLite</span></div>
-
-                    <div class="track-category">Systems &amp; DevOps</div>
-                    <div class="track-item"><i class="bi bi-ubuntu"></i><span>Arch / Debian</span></div>
-                    <div class="track-item"><i class="bi bi-box-seam"></i><span>Docker</span></div>
-                    <div class="track-item"><i class="bi bi-git"></i><span>Git CI/CD Pipelines</span></div>
-                    <div class="track-item"><i class="bi bi-tools"></i><span>CMake / Make</span></div>
-                    <div class="track-item"><i class="bi bi-file-earmark-code"></i><span>Vim / VS Code</span></div>
-
-                    <div class="track-category">Languages</div>
-                    <div class="track-item"><i class="bi bi-c-circle"></i><span>C</span></div>
-                    <div class="track-item"><i class="bi bi-cpu"></i><span>C++</span></div>
-                    <div class="track-item"><i class="bi bi-hash"></i><span>C#</span></div>
-                    <div class="track-item"><i class="bi bi-memory"></i><span>Assembly x86 / arm</span></div>
-                    <div class="track-item"><i class="bi bi-terminal"></i><span>Python</span></div>
-                    <div class="track-item"><i class="bi bi-code-square"></i><span>Go</span></div>
-                    <div class="track-item"><i class="bi bi-android2"></i><span>Kotlin</span></div>
-                    <div class="track-item"><i class="bi bi-code"></i><span>Rust</span></div>
-                    <div class="track-item"><i class="bi bi-braces"></i><span>TypeScript</span></div>
-                    <div class="track-item"><i class="bi bi-filetype-js"></i><span>JavaScript</span></div>
-                    <div class="track-item"><i class="bi bi-terminal-fill"></i><span>Bash</span></div>
-
-                    <div class="track-category">Offensive &amp; Research</div>
-                    <div class="track-item"><i class="bi bi-shield-slash"></i><span>Sliver C2</span></div>
-                    <div class="track-item"><i class="bi bi-radar"></i><span>Nmap</span></div>
-                    <div class="track-item"><i class="bi bi-incognito"></i><span>Burp Suite</span></div>
-                    <div class="track-item"><i class="bi bi-bug"></i><span>Metasploit</span></div>
-                    <div class="track-item"><i class="bi bi-shield-exclamation"></i><span>AFL++ Fuzzing</span></div>
-                    <div class="track-item"><i class="bi bi-binoculars"></i><span>Ghidra</span></div>
-                    <div class="track-item"><i class="bi bi-diagram-3"></i><span>IDA Pro</span></div>
-                    <div class="track-item"><i class="bi bi-bug-fill"></i><span>GDB / ptrace</span></div>
-                    <div class="track-item"><i class="bi bi-ethernet"></i><span>Wireshark</span></div>
-                    </div>
-                </div>
-            </aside>
+            <div class="term-title">root@tetstack-core:~ (i386 &middot; busybox &middot; real kernel)</div>
+            <button id="copy-btn" class="copy-btn" type="button"
+                    title="Copy full terminal contents (Ctrl+Shift+C)">COPY</button>
         </div>
-
-        <footer class="page-footer">
-            <span>PicasoTheDeal</span> &copy; 2026 &mdash; Addis Ababa, Ethiopia &mdash; Rendering the void with raw WebGL geometry.
-        </footer>
+        <div id="screen" tabindex="0"></div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+
     <script>
-        const initThreeJS = () => {
-            const container = document.getElementById('webgl-universe');
-            const scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x020306, 0.015);
+        window.addEventListener('DOMContentLoaded', () => {
+            const screen   = document.getElementById('screen');
+            const copyBtn  = document.getElementById('copy-btn');
 
-            const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 15, 60);
-            camera.lookAt(0, 0, 0);
-
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            container.appendChild(renderer.domElement);
-
-            const vertexShader = `
-                uniform float uTime;
-                uniform float uScroll;
-                uniform vec2 uMouse;
-                varying float vZ;
-                varying vec2 vUv;
-
-                vec3 hash(vec3 p) {
-                    p = vec3(dot(p, vec3(127.1, 311.7, 74.7)), dot(p, vec3(269.5, 183.3, 246.1)), dot(p, vec3(113.5, 271.9, 124.6)));
-                    return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
+            const term = new Terminal({
+                fontFamily: "'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace",
+                fontSize: 14,
+                cursorBlink: true,
+                scrollback: 10000,
+                convertEol: true,
+                theme: {
+                    background: '#050505',
+                    foreground: '#c9d1d9',
+                    cursor: '#c9d1d9',
+                    selectionBackground: 'rgba(91, 122, 158, 0.45)'
                 }
-
-                float noise(vec3 p) {
-                    vec3 i = floor(p + dot(p, vec3(1.0/3.0)));
-                    vec3 x0 = p - i + dot(i, vec3(1.0/6.0));
-                    vec3 g = step(x0.yzx, x0.xyz);
-                    vec3 l = 1.0 - g;
-                    vec3 i1 = min(g.xyz, l.zxy);
-                    vec3 i2 = max(g.xyz, l.zxy);
-                    vec3 x1 = x0 - i1 + 1.0/6.0;
-                    vec3 x2 = x0 - i2 + 1.0/3.0;
-                    vec3 x3 = x0 - 0.5;
-                    i = mod(i, 289.0);
-                    vec4 t = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-                    t *= t; t *= t;
-                    return 22.0 * dot(t, vec4(dot(hash(i), x0), dot(hash(i + i1), x1), dot(hash(i + i2), x2), dot(hash(i + 1.0), x3)));
-                }
-
-                void main() {
-                    vUv = uv;
-                    vec3 pos = position;
-                    float timeOffset = uTime * 0.5;
-                    float scrollOffset = uScroll * 0.05;
-                    float n1 = noise(vec3(pos.x * 0.05, pos.y * 0.05 + scrollOffset, timeOffset * 0.2)) * 10.0;
-                    float n2 = noise(vec3(pos.x * 0.1, pos.y * 0.1 + scrollOffset, timeOffset * 0.4)) * 5.0;
-                    float dist = distance(pos.xy, vec2(uMouse.x * 100.0, -uMouse.y * 100.0 + scrollOffset));
-                    float shockwave = 0.0;
-                    if (dist < 40.0) {
-                        shockwave = sin((dist - timeOffset * 50.0) * 0.5) * exp(-dist * 0.05) * 15.0;
-                    }
-                    pos.z = n1 + n2 + shockwave;
-                    vZ = pos.z;
-                    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-                    gl_Position = projectionMatrix * mvPosition;
-                }
-            `;
-
-            const fragmentShader = `
-                uniform float uTime;
-                varying float vZ;
-                varying vec2 vUv;
-                void main() {
-                    vec2 grid = fract(vUv * 150.0);
-                    float line = min(grid.x, grid.y);
-                    float edge = 1.0 - smoothstep(0.0, 0.08, line);
-                    vec3 colorBase = vec3(0.01, 0.03, 0.08);
-                    vec3 colorHigh = vec3(0.35, 0.48, 0.62);
-                    vec3 colorPeak = vec3(0.48, 0.75, 1.0);
-                    float heightNorm = smoothstep(-10.0, 15.0, vZ);
-                    vec3 finalColor = mix(colorBase, colorHigh, heightNorm);
-                    finalColor = mix(finalColor, colorPeak, smoothstep(0.7, 1.0, heightNorm));
-                    float glow = edge * (0.2 + heightNorm * 0.8);
-                    gl_FragColor = vec4(finalColor + glow * colorPeak, 1.0 - smoothstep(20.0, -10.0, vZ)*0.5);
-                }
-            `;
-
-            const planeGeo = new THREE.PlaneGeometry(300, 300, 180, 180);
-            const uniforms = { uTime: { value: 0 }, uScroll: { value: 0 }, uMouse: { value: new THREE.Vector2(0, 0) } };
-
-            const planeMat = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms, wireframe: false, transparent: true, side: THREE.DoubleSide });
-            const terrain = new THREE.Mesh(planeGeo, planeMat);
-            terrain.rotation.x = -Math.PI / 2 + 0.2;
-            terrain.position.y = -10;
-            scene.add(terrain);
-
-            const particlesGeo = new THREE.BufferGeometry();
-            const pCount = 5000;
-            const pPos = new Float32Array(pCount * 3);
-            for(let i=0; i < pCount * 3; i++) pPos[i] = (Math.random() - 0.5) * 200;
-            particlesGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-            const particlesMat = new THREE.PointsMaterial({ color: 0x5b7a9e, size: 0.3, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
-            const particleSystem = new THREE.Points(particlesGeo, particlesMat);
-            scene.add(particleSystem);
-
-            let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0, scrollY = 0;
-            let clock = new THREE.Clock();
-
-            document.addEventListener('mousemove', (e) => {
-                mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-                uniforms.uMouse.value.set(mouseX, mouseY);
             });
 
-            window.addEventListener('scroll', () => { scrollY = window.scrollY; uniforms.uScroll.value = scrollY; }, { passive: true });
+            const fitAddon = new FitAddon.FitAddon();
+            term.loadAddon(fitAddon);
+            term.open(screen);
+            fitAddon.fit();
 
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
+            window.addEventListener('resize', () => fitAddon.fit());
 
-            const animate = () => {
-                requestAnimationFrame(animate);
-                const time = clock.getElapsedTime();
-                uniforms.uTime.value = time;
-                targetX = mouseX * 10;
-                targetY = mouseY * 5;
-                camera.position.x += (targetX - camera.position.x) * 0.02;
-                camera.position.y += (15 + targetY - camera.position.y) * 0.02;
-                camera.lookAt(0, 0, -20);
-                particleSystem.rotation.y = time * 0.02;
-                particleSystem.rotation.z = time * 0.01;
-                renderer.render(scene, camera);
-            };
-            animate();
-        };
 
-        if (window.innerWidth > 768) initThreeJS();
 
-        async function loadBlogManifest() {
-            const statusEl = document.getElementById('blog-telemetry-status');
-            const payloadEl = document.getElementById('blog-telemetry-payload');
-            try {
-                const response = await fetch('https://engineering-logs.pages.dev/posts.json');
-                if (!response.ok) throw new Error('Manifest unavailable');
-                const data = await response.json();
-                const latestPost = data[0];
-                document.getElementById('blog-node-tag').innerText = `[${latestPost.category}]`;
-                document.getElementById('blog-node-meta-details').innerText = ` ${latestPost.date}`;
-                document.getElementById('blog-node-title').innerText = latestPost.title;
-                document.getElementById('blog-node-excerpt').innerText = latestPost.excerpt;
-                document.getElementById('blog-node-link').href = `https://engineering-logs.pages.dev/post?id=${latestPost.id}`;
-                statusEl.style.display = 'none';
-                payloadEl.style.display = 'block';
-            } catch (err) {
-                statusEl.innerText = "[ ERROR: TELEMETRY LINK LOST ]";
+            function getTerminalText() {
+                const buf = term.buffer.active;
+                const lines = [];
+                for (let i = 0; i < buf.length; i++) {
+                    const line = buf.getLine(i);
+                    if (line) lines.push(line.translateToString(true));
+                }
+                while (lines.length && lines[lines.length - 1] === '') lines.pop();
+                return lines.join('\n');
             }
-        }
 
-        function fetchChaosStatus() {
-            document.getElementById('chaos-seed-display').textContent = '● ACTIVE_STATE';
-            document.getElementById('chaos-visitor-display').textContent = '●';
-        }
-
-        const v86State = { term: null, fitAddon: null, emulator: null, initialized: false, loading: false };
-
-        function loadScript(url) {
-            return new Promise((resolve, reject) => {
-                const el = document.createElement('script');
-                el.src = url;
-                el.onload = () => resolve();
-                el.onerror = () => reject(new Error('Failed to load ' + url));
-                document.head.appendChild(el);
-            });
-        }
-
-        function loadStylesheet(url) {
-            return new Promise((resolve) => {
-                const el = document.createElement('link');
-                el.rel = 'stylesheet';
-                el.href = url;
-                el.onload = () => resolve();
-                el.onerror = () => resolve();
-                document.head.appendChild(el);
-            });
-        }
-
-        function getAllTerminalText(term) {
-            const buf = term.buffer.active;
-            const lines = [];
-            for (let i = 0; i < buf.length; i++) {
-                const line = buf.getLine(i);
-                if (line) lines.push(line.translateToString(true));
-            }
-            while (lines.length && lines[lines.length - 1] === '') lines.pop();
-            return lines.join('\n');
-        }
-
-        function copyTextToClipboard(text) {
-            if (!text) return Promise.resolve(false);
-            const fallback = () => {
+            function legacyCopy(text) {
                 const ta = document.createElement('textarea');
                 ta.value = text;
                 ta.setAttribute('readonly', '');
@@ -1122,254 +220,59 @@
                 try { ok = document.execCommand('copy'); } catch (_) { ok = false; }
                 document.body.removeChild(ta);
                 return ok;
-            };
-            if (navigator.clipboard && window.isSecureContext) {
-                return navigator.clipboard.writeText(text).then(() => true).catch(() => fallback());
             }
-            return Promise.resolve(fallback());
-        }
 
-        function copyTerminalContents(term, buttonEl, onlySelection) {
-            if (!term) return;
-            let text;
-            if (onlySelection) {
-                text = term.getSelection();
-                if (!text) return;
-            } else {
-                const sel = term.getSelection();
-                text = (sel && sel.length) ? sel : getAllTerminalText(term);
-            }
-            if (!text) return;
-            copyTextToClipboard(text).then((ok) => {
-                if (!ok || !buttonEl) return;
-                buttonEl.textContent = 'COPIED';
-                buttonEl.classList.add('copied');
-                clearTimeout(buttonEl._t);
-                buttonEl._t = setTimeout(() => {
-                    buttonEl.textContent = 'COPY';
-                    buttonEl.classList.remove('copied');
-                }, 1200);
-            });
-        }
+            function copyTerminal() {
+                const selection = term.getSelection();
+                const text = selection && selection.length ? selection : getTerminalText();
 
-        async function pasteFromClipboard(term) {
-            if (!term) return;
-            try {
-                if (navigator.clipboard && navigator.clipboard.readText) {
-                    const text = await navigator.clipboard.readText();
-                    if (text) term.paste(text);
-                }
-            } catch (_) {}
-        }
+                const onSuccess = () => {
+                    const original = copyBtn.textContent;
+                    copyBtn.textContent = 'COPIED';
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.textContent = original;
+                        copyBtn.classList.remove('copied');
+                    }, 1200);
+                };
 
-        let ctxMenuEl = null;
-
-        function hideCtxMenu() {
-            if (ctxMenuEl && ctxMenuEl.parentNode) ctxMenuEl.parentNode.removeChild(ctxMenuEl);
-            ctxMenuEl = null;
-        }
-
-        function makeCtxItem(label, shortcut, action, disabled) {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.tabIndex = -1;
-            if (disabled) btn.classList.add('disabled');
-            const spanLabel = document.createElement('span');
-            spanLabel.textContent = label;
-            btn.appendChild(spanLabel);
-            if (shortcut) {
-                const spanKey = document.createElement('span');
-                spanKey.className = 'ctx-shortcut';
-                spanKey.textContent = shortcut;
-                btn.appendChild(spanKey);
-            }
-            btn.addEventListener('mousedown', (e) => { e.preventDefault(); e.stopPropagation(); });
-            btn.addEventListener('mouseup',  (e) => { e.preventDefault(); e.stopPropagation(); });
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (!disabled && typeof action === 'function') action();
-                hideCtxMenu();
-            });
-            return btn;
-        }
-
-        function makeCtxSeparator() {
-            const sep = document.createElement('div');
-            sep.className = 'ctx-separator';
-            return sep;
-        }
-
-        function showCtxMenu(x, y, term) {
-            hideCtxMenu();
-            const menu = document.createElement('div');
-            menu.className = 'term-ctx-menu';
-            ctxMenuEl = menu;
-
-            const hasSelection = !!(term.getSelection && term.getSelection().length);
-
-            menu.appendChild(makeCtxItem('Copy Selected', 'Ctrl+Shift+C',
-                () => copyTextToClipboard(term.getSelection()), !hasSelection));
-            menu.appendChild(makeCtxItem('Copy All', '',
-                () => copyTextToClipboard(getAllTerminalText(term)), false));
-            menu.appendChild(makeCtxSeparator());
-            menu.appendChild(makeCtxItem('Paste', 'Ctrl+V',
-                () => pasteFromClipboard(term), false));
-            menu.appendChild(makeCtxItem('Select All', '',
-                () => term.selectAll(), false));
-            menu.appendChild(makeCtxSeparator());
-            menu.appendChild(makeCtxItem('Clear', '',
-                () => term.clear(), false));
-
-            menu.style.visibility = 'hidden';
-            document.body.appendChild(menu);
-            const rect = menu.getBoundingClientRect();
-            const px = Math.min(x, window.innerWidth  - rect.width  - 8);
-            const py = Math.min(y, window.innerHeight - rect.height - 8);
-            menu.style.left = Math.max(4, px) + 'px';
-            menu.style.top  = Math.max(4, py) + 'px';
-            menu.style.visibility = 'visible';
-
-            const dismiss = (e) => {
-                if (ctxMenuEl && !ctxMenuEl.contains(e.target)) { hideCtxMenu(); cleanup(); }
-            };
-            const onBlur = () => { hideCtxMenu(); cleanup(); };
-            const cleanup = () => {
-                document.removeEventListener('mousedown', dismiss, true);
-                document.removeEventListener('wheel', dismiss, true);
-                window.removeEventListener('blur', onBlur);
-            };
-            setTimeout(() => {
-                document.addEventListener('mousedown', dismiss, true);
-                document.addEventListener('wheel', dismiss, true);
-                window.addEventListener('blur', onBlur);
-            }, 0);
-        }
-
-        function setupTerminalFocus(term, screenEl, termEl) {
-            const indicator = document.getElementById('focus-indicator');
-            let mode = 'page';
-
-            function updateIndicator() {
-                if (!indicator) return;
-                if (mode === 'terminal') {
-                    indicator.textContent = '● TERMINAL FOCUS · ESC to release';
-                    indicator.className = 'focus-indicator terminal-mode';
-                    termEl.classList.add('is-focused');
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
+                        if (legacyCopy(text)) onSuccess();
+                    });
                 } else {
-                    indicator.textContent = 'PAGE SCROLL · click terminal to type';
-                    indicator.className = 'focus-indicator page-mode';
-                    termEl.classList.remove('is-focused');
+                    if (legacyCopy(text)) onSuccess();
                 }
             }
-            updateIndicator();
 
-            termEl.addEventListener('focusin', () => { mode = 'terminal'; updateIndicator(); });
-            termEl.addEventListener('focusout', (e) => {
-                if (!termEl.contains(e.relatedTarget)) { mode = 'page'; updateIndicator(); }
-            });
-
-            termEl.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
-                }
-            }, true);
-
-            document.addEventListener('mousedown', (e) => {
-                if (!termEl.contains(e.target)) {
-                    const ae = document.activeElement;
-                    if (ae && termEl.contains(ae) && typeof ae.blur === 'function') ae.blur();
-                }
-            }, true);
-
-            termEl.addEventListener('contextmenu', (e) => {
+            copyBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
-                showCtxMenu(e.clientX, e.clientY, term);
+                copyTerminal();
+                term.focus();
             });
-
-            document.addEventListener('keydown', (e) => {
-                if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    copyTerminalContents(term, document.getElementById('term-copy-btn'), false);
-                }
-            }, true);
 
             term.attachCustomKeyEventHandler((e) => {
-                if (e.type !== 'keydown') return true;
-                if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) return false;
+                if (e.type === 'keydown' && e.ctrlKey && e.shiftKey
+                    && (e.key === 'C' || e.key === 'c')) {
+                    copyTerminal();
+                    return false;
+                }
                 return true;
             });
-        }
 
-        async function initV86() {
-            if (v86State.initialized || v86State.loading) return;
-            v86State.loading = true;
-
-            const statusEl = document.getElementById('v86-status');
-            const setStatus = (text) => { statusEl.textContent = text; };
-
-            try {
-                setStatus('loading terminal subsystem...');
-                await loadStylesheet('https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css');
-                await loadScript('https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js');
-                await loadScript('https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js');
-
-                setStatus('loading emulator core...');
-                await loadScript('v86_assets/libv86.js');
-
+            const s = document.createElement('script');
+            s.src = 'v86_assets/libv86.js';
+            s.onload = () => {
                 const V86Ctor = window.V86 || window.V86Starter;
-                if (!V86Ctor) throw new Error('V86 constructor missing');
-
-                const screenEl = document.getElementById('v86-screen');
-                const termEl   = document.getElementById('gh-terminal');
-                const copyBtn  = document.getElementById('term-copy-btn');
-                const hiddenScreen = document.getElementById('v86-hidden-screen');
-
-                const term = new Terminal({
-                    fontFamily: "'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace",
-                    fontSize: 14,
-                    cursorBlink: true,
-                    scrollback: 5000,
-                    convertEol: true,
-                    scrollOnUserInput: true,
-                    theme: {
-                        background: '#050505',
-                        foreground: '#c9d1d9',
-                        cursor: '#c9d1d9',
-                        selectionBackground: 'rgba(91, 122, 158, 0.45)'
-                    }
-                });
-                const fitAddon = new FitAddon.FitAddon();
-                term.loadAddon(fitAddon);
-                term.open(screenEl);
-                fitAddon.fit();
-
-                v86State.term = term;
-                v86State.fitAddon = fitAddon;
-
-                setupTerminalFocus(term, screenEl, termEl);
-
-                copyBtn.addEventListener('mousedown', (e) => e.preventDefault());
-                copyBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    copyTerminalContents(term, copyBtn, false);
-                });
-
-                setStatus('booting kernel (6.8.12)...');
+                if (!V86Ctor) {
+                    console.error('[tetstack] libv86.js loaded but no V86 constructor found');
+                    return;
+                }
 
                 const emulator = new V86Ctor({
                     wasm_path: 'v86_assets/v86.wasm',
                     memory_size: 128 * 1024 * 1024,
                     vga_memory_size: 2 * 1024 * 1024,
-
-                    screen_container: hiddenScreen,
-
-                    disable_keyboard: true,
-                    disable_mouse: true,
-                    disable_speaker: true,
 
                     bios:     { url: 'v86_assets/seabios.bin', async: true },
                     vga_bios: { url: 'v86_assets/vgabios.bin', async: true },
@@ -1381,77 +284,31 @@
                              'earlyprintk=serial,ttyS0,115200 ' +
                              'rdinit=/init acpi=off noapic',
 
+                    disable_speaker: true,
                     autostart: true,
                 });
 
-                v86State.emulator = emulator;
                 window.__tetstack = { emulator };
-
-                let outBuf = '';
-                let rafScheduled = false;
-                const BUF_TRIM = 24 * 1024;
-                const BUF_KEEP = 16 * 1024;
-
-                function scheduleFlush() {
-                    if (rafScheduled) return;
-                    rafScheduled = true;
-                    requestAnimationFrame(flushOutput);
-                }
-
-                function flushOutput() {
-                    rafScheduled = false;
-                    if (!outBuf) return;
-                    let data = outBuf;
-                    outBuf = '';
-                    if (data.length > BUF_TRIM) data = data.slice(-BUF_KEEP);
-
-                    const bufBefore = term.buffer.active;
-                    const distFromBottom = bufBefore.baseY - bufBefore.viewportY;
-                    term.write(data);
-
-                    if (distFromBottom > 0) {
-                        requestAnimationFrame(() => {
-                            const nb = term.buffer.active;
-                            const target = Math.max(0, nb.baseY - distFromBottom);
-                            if (nb.viewportY !== target) term.scrollToLine(target);
-                        });
-                    }
-                }
-
-                function queueOutput(str) {
-                    outBuf += str;
-                    if (outBuf.length > BUF_TRIM * 2) outBuf = outBuf.slice(-BUF_KEEP);
-                    scheduleFlush();
-                }
 
                 emulator.add_listener('serial0-output-byte', (byte) => {
                     const char = String.fromCharCode(byte);
-                    if (char === '\r') return;
-                    queueOutput(char);
+                    if (char !== '\r') term.write(char);
                 });
 
                 term.onData((data) => {
-                    for (let i = 0; i < data.length; i++) emulator.serial0_send(data[i]);
+                    for (let i = 0; i < data.length; i++) {
+                        emulator.serial0_send(data[i]);
+                    }
                 });
 
-                setStatus('● live — serial0 @ 115200');
-                v86State.initialized = true;
-            } catch (err) {
-                console.error('[tetstack] v86 init failed:', err);
-                setStatus('[!] init failed: ' + err.message);
-            } finally {
-                v86State.loading = false;
-            }
-        }
+                term.focus();
+            };
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadBlogManifest();
-            fetchChaosStatus();
-            initV86();
-
-            window.addEventListener('resize', () => {
-                if (v86State.fitAddon) v86State.fitAddon.fit();
-            });
+            s.onerror = () => {
+                console.error('[tetstack] failed to load v86_assets/libv86.js');
+                term.write('\r\n[error] Failed to load v86 library.\r\n');
+            };
+            document.head.appendChild(s);
         });
     </script>
 </body>
