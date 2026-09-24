@@ -77,6 +77,9 @@ cd ..
 
     Refer `https://copy.sh/v86/build` and their GtHub `https://github.com/copy/v86`.
 
+## Credits
+
+To [Copy](https://github.com/copy/v86)
 
 ## LICENCE
 
