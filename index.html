@@ -28,11 +28,7 @@
             --left-col-max: 720px;
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         html {
             scroll-behavior: smooth;
@@ -70,14 +66,10 @@
             margin: 0 auto;
             padding: 0 48px;
             background: linear-gradient(to right, rgba(5,5,5,0.85) 0%, rgba(5,5,5,0.4) 50%, rgba(5,5,5,0.85) 100%);
-            backdrop-filter: blur(2px);
             box-shadow: 0 0 100px rgba(0,0,0,0.8);
         }
 
-        .hero {
-            padding: 80px 0 56px;
-            position: relative;
-        }
+        .hero { padding: 80px 0 56px; position: relative; }
 
         .hero-overline {
             font-family: var(--font-mono);
@@ -114,21 +106,8 @@
             background: linear-gradient(90deg, var(--accent), transparent);
         }
 
-        .hero-title-block {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 24px;
-            align-items: baseline;
-            margin-bottom: 10px;
-            margin-top: 6px;
-        }
-
-        .hero-title {
-            font-size: 1.15rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            letter-spacing: -0.005em;
-        }
+        .hero-title-block { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; margin-bottom: 10px; margin-top: 6px; }
+        .hero-title { font-size: 1.15rem; font-weight: 500; color: var(--text-secondary); letter-spacing: -0.005em; }
 
         .hero-location {
             font-size: 0.85rem;
@@ -139,20 +118,9 @@
             white-space: nowrap;
         }
 
-        .hero-location::before {
-            content: '// ';
-            color: var(--accent);
-            opacity: 0.8;
-            text-shadow: 0 0 5px var(--accent);
-        }
+        .hero-location::before { content: '// '; color: var(--accent); opacity: 0.8; text-shadow: 0 0 5px var(--accent); }
 
-        .hero-contact-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-top: 14px;
-            align-items: center;
-        }
+        .hero-contact-row { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 14px; align-items: center; }
 
         .hero-contact-link {
             font-family: var(--font-mono);
@@ -169,33 +137,12 @@
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .hero-contact-link:hover {
-            color: #fff;
-            border-bottom-color: var(--accent);
-            text-shadow: 0 0 8px rgba(255,255,255,0.4);
-            transform: translateY(-2px);
-        }
+        .hero-contact-link:hover { color: #fff; border-bottom-color: var(--accent); text-shadow: 0 0 8px rgba(255,255,255,0.4); transform: translateY(-2px); }
+        .hero-contact-link i { font-size: 0.85rem; color: var(--text-tertiary); transition: color 0.2s ease; }
+        .hero-contact-link:hover i { color: var(--accent-glow); }
+        .hero-contact-sep { color: var(--border-default); font-size: 0.7rem; user-select: none; }
 
-        .hero-contact-link i {
-            font-size: 0.85rem;
-            color: var(--text-tertiary);
-            transition: color 0.2s ease;
-        }
-        .hero-contact-link:hover i {
-            color: var(--accent-glow);
-        }
-
-        .hero-contact-sep {
-            color: var(--border-default);
-            font-size: 0.7rem;
-            user-select: none;
-        }
-
-        .narrative-section {
-            margin-top: 36px;
-            padding-top: 28px;
-            max-width: 65%;
-        }
+        .narrative-section { margin-top: 36px; padding-top: 28px; max-width: 65%; }
 
         .narrative-label {
             font-family: var(--font-mono);
@@ -208,19 +155,8 @@
             display: block;
         }
 
-        .narrative-text {
-            font-size: 0.95rem;
-            font-weight: 400;
-            line-height: 1.75;
-            color: var(--text-secondary);
-            letter-spacing: 0.005em;
-            margin-bottom: 16px;
-        }
-
-        .narrative-author {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
+        .narrative-text { font-size: 0.95rem; font-weight: 400; line-height: 1.75; color: var(--text-secondary); letter-spacing: 0.005em; margin-bottom: 16px; }
+        .narrative-author { color: var(--text-primary); font-weight: 600; }
 
         .glass-terminal {
             margin-top: 32px;
@@ -228,8 +164,6 @@
             max-width: 900px;
             height: 460px;
             background-color: rgba(3, 5, 8, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(91, 122, 158, 0.35);
             border-radius: 8px;
             display: flex;
@@ -242,10 +176,7 @@
 
         .glass-terminal.is-focused {
             border-color: rgba(124, 161, 204, 0.85);
-            box-shadow:
-                0 10px 40px rgba(0, 0, 0, 0.5),
-                inset 0 0 20px rgba(91, 122, 158, 0.12),
-                0 0 60px rgba(91, 122, 158, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(91, 122, 158, 0.12), 0 0 60px rgba(91, 122, 158, 0.3);
         }
 
         .term-header {
@@ -258,19 +189,8 @@
             flex-shrink: 0;
         }
 
-        .term-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .term-buttons span {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #5d6670;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-        }
+        .term-buttons { display: flex; gap: 8px; }
+        .term-buttons span { width: 12px; height: 12px; border-radius: 50%; background-color: #5d6670; opacity: 0.7; transition: opacity 0.2s; }
         .glass-terminal:hover .term-buttons span { opacity: 1; }
         .term-buttons span:nth-child(1) { background-color: #ff5f56; }
         .term-buttons span:nth-child(2) { background-color: #ffbd2e; }
@@ -283,7 +203,29 @@
             font-size: 0.7rem;
             color: var(--text-secondary);
             letter-spacing: 0.05em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+
+        .term-copy-btn {
+            flex-shrink: 0;
+            background: rgba(91, 122, 158, 0.15);
+            border: 1px solid rgba(91, 122, 158, 0.4);
+            color: #b1bac4;
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            font-weight: 600;
+            padding: 4px 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 0.1em;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+            user-select: none;
+        }
+        .term-copy-btn:hover { background: rgba(91, 122, 158, 0.32); color: #e6edf3; }
+        .term-copy-btn:active { transform: translateY(1px); }
+        .term-copy-btn.copied { background: rgba(39, 201, 63, 0.18); border-color: rgba(39, 201, 63, 0.6); color: #27c93f; }
 
         .term-screen {
             flex: 1;
@@ -291,13 +233,12 @@
             padding: 8px 12px;
             overflow: hidden;
             min-height: 0;
+            position: relative;
+            isolation: isolate;
         }
 
-        .term-screen .xterm .xterm-selection div {
-            background-color: rgba(91, 122, 158, 0.45) !important;
-        }
+        .term-screen .xterm .xterm-selection div { background-color: rgba(91, 122, 158, 0.45) !important; }
 
-        /* Thin visible scrollbar inside the guest terminal */
         .term-screen .xterm .xterm-viewport {
             scrollbar-width: thin;
             scrollbar-color: rgba(91, 122, 158, 0.45) transparent;
@@ -348,7 +289,6 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* --- Focus mode indicator (new) --- */
         .focus-indicator {
             padding: 2px 9px;
             border-radius: 3px;
@@ -359,32 +299,68 @@
             white-space: nowrap;
             transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         }
-        .focus-indicator.page-mode {
-            color: var(--accent-glow);
-            background: rgba(91, 122, 158, 0.12);
-            border: 1px solid rgba(91, 122, 158, 0.3);
+        .focus-indicator.page-mode { color: var(--accent-glow); background: rgba(91, 122, 158, 0.12); border: 1px solid rgba(91, 122, 158, 0.3); }
+        .focus-indicator.terminal-mode { color: #3fb950; background: rgba(63, 185, 80, 0.12); border: 1px solid rgba(63, 185, 80, 0.45); box-shadow: 0 0 10px rgba(63, 185, 80, 0.25); }
+
+        .term-ctx-menu {
+            position: fixed;
+            z-index: 99999;
+            background: rgba(10, 14, 20, 0.98);
+            border: 1px solid rgba(91, 122, 158, 0.55);
+            border-radius: 6px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            min-width: 180px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.85), 0 0 0 1px rgba(0,0,0,0.6), 0 0 24px rgba(91,122,158,0.15);
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+            user-select: none;
         }
-        .focus-indicator.terminal-mode {
-            color: #3fb950;
-            background: rgba(63, 185, 80, 0.12);
-            border: 1px solid rgba(63, 185, 80, 0.45);
-            box-shadow: 0 0 10px rgba(63, 185, 80, 0.25);
+        .term-ctx-menu button {
+            background: transparent;
+            border: none;
+            color: #c9d1d9;
+            text-align: left;
+            padding: 8px 14px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: inherit;
+            letter-spacing: 0.04em;
+            transition: background 0.1s ease, color 0.1s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            white-space: nowrap;
+        }
+        .term-ctx-menu button:hover { background: rgba(91, 122, 158, 0.38); color: #fff; }
+        .term-ctx-menu button:active { background: rgba(91, 122, 158, 0.55); }
+        .term-ctx-menu button .ctx-shortcut { font-size: 0.62rem; color: var(--text-tertiary); letter-spacing: 0.05em; }
+        .term-ctx-menu button.disabled { color: var(--text-tertiary); opacity: 0.4; pointer-events: none; }
+        .term-ctx-menu .ctx-separator { height: 1px; background: rgba(91, 122, 158, 0.2); margin: 4px 6px; }
+
+        #v86-hidden-screen {
+            position: absolute !important;
+            left: -9999px !important;
+            top: -9999px !important;
+            width: 1px !important;
+            height: 1px !important;
+            overflow: hidden !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            opacity: 0 !important;
         }
 
         .blog-preview-card, .chaos-stream-container, .project-block {
             background-color: rgba(11, 11, 11, 0.6);
-            backdrop-filter: blur(8px);
             border: 1px solid var(--border-default);
             border-radius: 6px;
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .blog-preview-card {
-            padding: 24px;
-            margin: 20px 0;
-            max-width: 480px;
-            position: relative;
-        }
+        .blog-preview-card { padding: 24px; margin: 20px 0; max-width: 480px; position: relative; }
 
         .blog-preview-card:hover, .chaos-stream-container:hover {
             border-color: var(--accent);
@@ -392,21 +368,8 @@
             transform: translateY(-2px);
         }
 
-        .card-terminal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-subtle);
-            padding-bottom: 12px;
-            margin-bottom: 16px;
-        }
-
-        .feed-label {
-            font-size: 0.72rem;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
+        .card-terminal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px; margin-bottom: 16px; }
+        .feed-label { font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.1em; }
 
         .live-pulse {
             width: 8px;
@@ -423,76 +386,17 @@
             100% { transform: scale(0.9); opacity: 0.4; }
         }
 
-        .scanning-status {
-            font-size: 0.85rem;
-            color: var(--text-tertiary);
-            padding: 8px 0;
-        }
+        .scanning-status { font-size: 0.85rem; color: var(--text-tertiary); padding: 8px 0; }
+        .node-meta { font-size: 0.7rem; color: var(--text-tertiary); display: block; margin-bottom: 8px; }
+        .tag-highlight { color: var(--accent-glow); font-weight: 600; margin-right: 6px; text-shadow: 0 0 5px rgba(91,122,158,0.4); }
+        .node-title { font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; line-height: 1.4; }
+        .node-excerpt { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .node-action-btn { font-size: 0.75rem; color: var(--accent); text-decoration: none; font-weight: 500; display: inline-block; transition: color 0.2s ease, text-shadow 0.2s ease; }
+        .node-action-btn:hover { color: #fff; text-shadow: 0 0 8px var(--accent); }
+        .telemetry-payload-hidden { display: none; }
 
-        .node-meta {
-            font-size: 0.7rem;
-            color: var(--text-tertiary);
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .tag-highlight {
-            color: var(--accent-glow);
-            font-weight: 600;
-            margin-right: 6px;
-            text-shadow: 0 0 5px rgba(91,122,158,0.4);
-        }
-
-        .node-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-
-        .node-excerpt {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 18px;
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .node-action-btn {
-            font-size: 0.75rem;
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-block;
-            transition: color 0.2s ease, text-shadow 0.2s ease;
-        }
-
-        .node-action-btn:hover {
-            color: #fff;
-            text-shadow: 0 0 8px var(--accent);
-        }
-
-        .telemetry-payload-hidden {
-            display: none;
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr var(--track-width);
-            gap: 0;
-            position: relative;
-        }
-
-        .left-column {
-            padding: 48px 0 80px;
-            padding-right: 56px;
-            max-width: var(--left-col-max);
-        }
+        .main-grid { display: grid; grid-template-columns: 1fr var(--track-width); gap: 0; position: relative; }
+        .left-column { padding: 48px 0 80px; padding-right: 56px; max-width: var(--left-col-max); }
 
         .right-column {
             position: sticky;
@@ -519,11 +423,7 @@
             padding-left: 14px;
             text-shadow: 0 0 10px rgba(255,255,255,0.2);
         }
-
-        .section-label.no-pad {
-            padding-left: 0;
-        }
-
+        .section-label.no-pad { padding-left: 0; }
         .section-label::before {
             content: '';
             position: absolute;
@@ -535,21 +435,9 @@
             background-color: var(--accent-glow);
             box-shadow: 0 0 8px var(--accent-glow);
         }
+        .section-label.no-pad::before { display: none; }
 
-        .section-label.no-pad::before {
-            display: none;
-        }
-
-        .commit-calendar-img {
-            width: 100%;
-            max-width: 800px;
-            height: auto;
-            border-radius: 8px;
-            border: 1px solid var(--border-default);
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            margin-bottom: 40px;
-        }
+        .commit-calendar-img { width: 100%; max-width: 800px; height: auto; border-radius: 8px; border: 1px solid var(--border-default); background: rgba(0, 0, 0, 0.5); padding: 10px; margin-bottom: 40px; }
 
         .project-block {
             position: relative;
@@ -560,7 +448,6 @@
             transition: all 0.3s ease;
             counter-increment: project-counter;
         }
-
         .project-block:hover {
             background-color: rgba(15, 20, 30, 0.4);
             border-left-color: var(--accent);
@@ -569,7 +456,6 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
             transform: translateX(4px);
         }
-
         .project-block::before {
             content: '0' counter(project-counter);
             font-family: var(--font-mono);
@@ -583,64 +469,15 @@
             transition: color 0.3s ease;
         }
         .project-block:hover::before { color: var(--accent-subtle); }
+        .project-link { display: block; text-decoration: none; color: inherit; height: 100%; }
+        .project-name { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.01em; color: var(--text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .project-name i { font-size: 0.8em; color: var(--text-tertiary); }
+        .project-subtitle { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 12px; text-transform: uppercase; }
+        .project-desc { font-size: 0.9rem; font-weight: 400; line-height: 1.7; color: var(--text-secondary); letter-spacing: 0.005em; }
 
-        .project-link {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            height: 100%;
-        }
-
-        .project-name {
-            font-size: 1.35rem;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .project-name i {
-            font-size: 0.8em;
-            color: var(--text-tertiary);
-        }
-
-        .project-subtitle {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 0.06em;
-            color: var(--accent);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-        }
-
-        .project-desc {
-            font-size: 0.9rem;
-            font-weight: 400;
-            line-height: 1.7;
-            color: var(--text-secondary);
-            letter-spacing: 0.005em;
-        }
-
-        .gallery-section {
-            margin-top: 44px;
-            padding-top: 28px;
-        }
-
-        .gallery-desc {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-        }
-
-        .poster-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
+        .gallery-section { margin-top: 44px; padding-top: 28px; }
+        .gallery-desc { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 24px; }
+        .poster-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
 
         .poster-card {
             border: 1px solid var(--border-default);
@@ -651,50 +488,13 @@
             position: relative;
             height: 100%;
         }
+        .poster-card:hover { border-color: var(--accent); transform: scale(1.03) translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.6), 0 0 20px rgba(91,122,158,0.2); z-index: 10; }
+        .poster-card img { width: 100%; object-fit: contain; display: block; height: auto; transition: opacity 0.3s ease, filter 0.3s ease; filter: brightness(0.85) contrast(1.1); }
+        .poster-card:hover img { filter: brightness(1.1) contrast(1.1); }
 
-        .poster-card:hover {
-            border-color: var(--accent);
-            transform: scale(1.03) translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.6), 0 0 20px rgba(91,122,158,0.2);
-            z-index: 10;
-        }
-
-        .poster-card img {
-            width: 100%;
-            object-fit: contain;
-            display: block;
-            height: auto;
-            transition: opacity 0.3s ease, filter 0.3s ease;
-            filter: brightness(0.85) contrast(1.1);
-        }
-
-        .poster-card:hover img {
-            filter: brightness(1.1) contrast(1.1);
-        }
-
-        .chaos-stream-container {
-            padding: 16px;
-            margin: 40px 0;
-            max-width: 100%;
-        }
-
-        .chaos-stream-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-subtle);
-            padding-bottom: 12px;
-            margin-bottom: 14px;
-        }
-
-        .chaos-stream-label {
-            font-size: 0.72rem;
-            color: var(--text-primary);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 600;
-        }
-
+        .chaos-stream-container { padding: 16px; margin: 40px 0; max-width: 100%; }
+        .chaos-stream-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px; margin-bottom: 14px; }
+        .chaos-stream-label { font-size: 0.72rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
         .chaos-stream-label i { margin-right: 6px; color: var(--accent-glow); }
 
         .chaos-live-badge {
@@ -712,106 +512,22 @@
             box-shadow: 0 0 10px rgba(63, 185, 80, 0.2);
         }
 
-        .chaos-iframe {
-            width: 100%;
-            height: 480px;
-            border: 1px solid rgba(255,255,255,0.05) !important;
-            background: #000;
-            display: block;
-            pointer-events: none;
-            border-radius: 4px;
-        }
-
-        .chaos-stream-footer {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px 24px;
-            margin-top: 14px;
-            padding-top: 12px;
-            border-top: 1px solid var(--border-subtle);
-        }
-
-        .chaos-stream-info {
-            font-size: 0.65rem;
-            color: var(--text-tertiary);
-            letter-spacing: 0.04em;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .chaos-iframe { width: 100%; height: 480px; border: 1px solid rgba(255,255,255,0.05) !important; background: #000; display: block; pointer-events: none; border-radius: 4px; }
+        .chaos-stream-footer { display: flex; flex-wrap: wrap; gap: 16px 24px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
+        .chaos-stream-info { font-size: 0.65rem; color: var(--text-tertiary); letter-spacing: 0.04em; display: flex; align-items: center; gap: 6px; }
         .chaos-stream-info i { color: var(--accent); }
-
-        .chaos-view-full-btn {
-            color: var(--accent);
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: all 0.2s ease;
-        }
+        .chaos-view-full-btn { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s ease; }
 
         .experience-section { margin-top: 44px; padding-top: 28px; }
-
-        .experience-block {
-            position: relative;
-            padding: 24px 0 24px 24px;
-            border-left: 2px solid var(--border-default);
-            transition: border-left-color 0.25s ease;
-        }
-
+        .experience-block { position: relative; padding: 24px 0 24px 24px; border-left: 2px solid var(--border-default); transition: border-left-color 0.25s ease; }
         .experience-block:hover { border-left-color: var(--accent-glow); }
+        .experience-role { font-size: 1.15rem; font-weight: 600; color: var(--text-primary); }
+        .experience-company { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 500; color: var(--accent); margin-bottom: 2px; display: block; }
+        .experience-dates { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-tertiary); margin-bottom: 10px; display: block; }
 
-        .experience-role {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .experience-company {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--accent);
-            margin-bottom: 2px;
-            display: block;
-        }
-
-        .experience-dates {
-            font-family: var(--font-mono);
-            font-size: 0.68rem;
-            color: var(--text-tertiary);
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .track-header {
-            flex-shrink: 0;
-            padding: 20px 20px 14px;
-            background-color: transparent;
-            z-index: 3;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .track-header-label {
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-shadow: 0 0 8px rgba(255,255,255,0.3);
-        }
-
-        .track-pulse {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background-color: var(--accent-glow);
-            box-shadow: 0 0 8px var(--accent-glow);
-            animation: pulse-dot 2s ease-in-out infinite;
-        }
+        .track-header { flex-shrink: 0; padding: 20px 20px 14px; background-color: transparent; z-index: 3; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .track-header-label { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-primary); display: flex; align-items: center; gap: 8px; text-shadow: 0 0 8px rgba(255,255,255,0.3); }
+        .track-pulse { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: var(--accent-glow); box-shadow: 0 0 8px var(--accent-glow); animation: pulse-dot 2s ease-in-out infinite; }
 
         .scroll-track-outer {
             flex: 1;
@@ -821,21 +537,12 @@
             mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
             background: rgba(10, 10, 10, 0.4);
             border-left: 1px solid rgba(255,255,255,0.02);
-            backdrop-filter: blur(5px);
         }
 
-        .scroll-track-inner {
-            animation: scrollTrackVertical 35s linear infinite;
-            padding: 20px 16px;
-            will-change: transform;
-        }
-
+        .scroll-track-inner { animation: scrollTrackVertical 35s linear infinite; padding: 20px 16px; will-change: transform; }
         .scroll-track-inner:hover { animation-play-state: paused; }
 
-        @keyframes scrollTrackVertical {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
-        }
+        @keyframes scrollTrackVertical { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
 
         .track-category {
             font-family: var(--font-mono);
@@ -849,56 +556,14 @@
             margin-bottom: 12px;
         }
 
-        .track-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 12px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-            cursor: default;
-            margin-bottom: 4px;
-        }
-
-        .track-item:hover {
-            background-color: rgba(91, 122, 158, 0.15);
-            transform: translateX(4px);
-        }
-
-        .track-item i {
-            font-size: 1.1rem;
-            color: var(--text-tertiary);
-            width: 22px;
-            text-align: center;
-            flex-shrink: 0;
-            transition: color 0.2s ease, transform 0.2s;
-        }
-
-        .track-item:hover i {
-            color: var(--accent-glow);
-            transform: scale(1.2);
-            text-shadow: 0 0 10px var(--accent-glow);
-        }
-
-        .track-item span {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            transition: color 0.2s ease;
-        }
+        .track-item { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 4px; transition: all 0.2s ease; cursor: default; margin-bottom: 4px; }
+        .track-item:hover { background-color: rgba(91, 122, 158, 0.15); transform: translateX(4px); }
+        .track-item i { font-size: 1.1rem; color: var(--text-tertiary); width: 22px; text-align: center; flex-shrink: 0; transition: color 0.2s ease, transform 0.2s; }
+        .track-item:hover i { color: var(--accent-glow); transform: scale(1.2); text-shadow: 0 0 10px var(--accent-glow); }
+        .track-item span { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap; transition: color 0.2s ease; }
         .track-item:hover span { color: #fff; }
 
-        .page-footer {
-            padding: 30px 0;
-            border-top: 1px solid var(--border-subtle);
-            text-align: left;
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            color: var(--text-tertiary);
-            letter-spacing: 0.05em;
-        }
+        .page-footer { padding: 30px 0; border-top: 1px solid var(--border-subtle); text-align: left; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-tertiary); letter-spacing: 0.05em; }
         .page-footer span { color: var(--accent-glow); font-weight: bold; }
 
         @media (max-width: 1100px) {
@@ -967,13 +632,15 @@
                         <span></span><span></span><span></span>
                     </div>
                     <div class="term-title">root@tetstack-core:~ (i386 &middot; busybox &middot; real kernel)</div>
+                    <button id="term-copy-btn" class="term-copy-btn" type="button"
+                            title="Copy selection, or entire terminal buffer">COPY</button>
                 </div>
                 <div id="v86-screen" class="term-screen"></div>
                 <div class="term-status">
                     <span id="v86-status"><span class="live-dot"></span>awaiting operator</span>
                     <span id="focus-indicator" class="focus-indicator page-mode">PAGE SCROLL &middot; click terminal to type</span>
-                    <span>Ctrl+Shift+C to copy</span>
                 </div>
+                <div id="v86-hidden-screen" aria-hidden="true"></div>
             </div>
         </header>
 
@@ -1077,9 +744,7 @@
                 <article class="project-block">
                     <a href="https://github.com/PicasoTheDeal/AUR-scanner" target="_blank" rel="noopener noreferrer" class="project-link">
                         <h2 class="project-name">AUR-scanner <i class="bi bi-github"></i></h2>
-                        <p class="project-subtitle">
-                            Offline Static Analysis Utility
-                        </p>
+                        <p class="project-subtitle">Offline Static Analysis Utility</p>
                         <p class="project-desc">
                             A lightweight offline static analysis tool to scan local ALPM metadata and AUR helper
                             build caches for heuristic anomalies and known threat signatures.
@@ -1127,58 +792,29 @@
 
                 <div class="gallery-section">
                     <span class="section-label">Graphic &amp; Poster Design Gallery</span>
-                    <p class="gallery-desc">
-                        Visual explorations and digital art experiments.
-                    </p>
+                    <p class="gallery-desc">Visual explorations and digital art experiments.</p>
                     <div class="poster-grid">
-                        <div class="poster-card">
-                            <img src="assets/image-02.jpg" alt="Poster Design 02" loading="lazy">
-                        </div>
-                        <div class="poster-card">
-                            <img src="assets/image-03.jpg" alt="Poster Design 03" loading="lazy">
-                        </div>
-                        <div class="poster-card">
-                            <img src="assets/image-04.jpg" alt="Poster Design 04" loading="lazy">
-                        </div>
-                        <div class="poster-card">
-                            <img src="assets/image-07.jpg" alt="Poster Design 07" loading="lazy">
-                        </div>
+                        <div class="poster-card"><img src="assets/image-02.jpg" alt="Poster Design 02" loading="lazy"></div>
+                        <div class="poster-card"><img src="assets/image-03.jpg" alt="Poster Design 03" loading="lazy"></div>
+                        <div class="poster-card"><img src="assets/image-04.jpg" alt="Poster Design 04" loading="lazy"></div>
+                        <div class="poster-card"><img src="assets/image-07.jpg" alt="Poster Design 07" loading="lazy"></div>
                     </div>
                 </div>
 
                 <div class="chaos-stream-container">
                     <div class="chaos-stream-header">
-                        <span class="chaos-stream-label">
-                            <i class="bi bi-broadcast"></i> LIVE: CHAOS ENGINE
-                        </span>
-                        <span class="chaos-live-badge">
-                            <span class="chaos-pulse-dot"></span>
-                        </span>
+                        <span class="chaos-stream-label"><i class="bi bi-broadcast"></i> LIVE: CHAOS ENGINE</span>
+                        <span class="chaos-live-badge"><span class="chaos-pulse-dot"></span></span>
                     </div>
 
-                    <iframe 
-                        src="https://controlled-chaos.pages.dev/" 
-                        class="chaos-iframe"
-                        title="Controlled Chaos Stream"
-                        allow="autoplay"
-                        loading="lazy"
-                    ></iframe>
+                    <iframe src="https://controlled-chaos.pages.dev/" class="chaos-iframe" title="Controlled Chaos Stream" allow="autoplay" loading="lazy"></iframe>
 
                     <div class="chaos-stream-footer">
-                        <span class="chaos-stream-info">
-                            <i class="bi bi-cpu"></i> Unique 3D universe generated daily
-                        </span>
-                        <span class="chaos-stream-info">
-                            <i class="bi bi-dice-6"></i> Seed: <span id="chaos-seed-display">—</span>
-                        </span>
-                        <span class="chaos-stream-info">
-                            <i class="bi bi-people"></i> <span id="chaos-visitor-display">—</span> visitors today
-                        </span>
-                        <span class="chaos-stream-info">
-                            <i class="bi bi-github"></i>
-                            <a href="https://github.com/PicasoTheDeal/CHAOS" target="_blank" class="chaos-view-full-btn">
-                                View Source
-                            </a>
+                        <span class="chaos-stream-info"><i class="bi bi-cpu"></i> Unique 3D universe generated daily</span>
+                        <span class="chaos-stream-info"><i class="bi bi-dice-6"></i> Seed: <span id="chaos-seed-display">—</span></span>
+                        <span class="chaos-stream-info"><i class="bi bi-people"></i> <span id="chaos-visitor-display">—</span> visitors today</span>
+                        <span class="chaos-stream-info"><i class="bi bi-github"></i>
+                            <a href="https://github.com/PicasoTheDeal/CHAOS" target="_blank" class="chaos-view-full-btn">View Source</a>
                         </span>
                     </div>
                 </div>
@@ -1201,13 +837,10 @@
 
             <aside class="right-column">
                 <div class="track-header">
-                    <span class="track-header-label">
-                        <span class="track-pulse"></span> Technical Stack
-                    </span>
+                    <span class="track-header-label"><span class="track-pulse"></span> Technical Stack</span>
                 </div>
                 <div class="scroll-track-outer">
                     <div class="scroll-track-inner">
-
                     <div class="track-category">Languages</div>
                     <div class="track-item"><i class="bi bi-c-circle"></i><span>C</span></div>
                     <div class="track-item"><i class="bi bi-cpu"></i><span>C++</span></div>
@@ -1325,22 +958,17 @@
                 void main() {
                     vUv = uv;
                     vec3 pos = position;
-
                     float timeOffset = uTime * 0.5;
                     float scrollOffset = uScroll * 0.05;
-
                     float n1 = noise(vec3(pos.x * 0.05, pos.y * 0.05 + scrollOffset, timeOffset * 0.2)) * 10.0;
                     float n2 = noise(vec3(pos.x * 0.1, pos.y * 0.1 + scrollOffset, timeOffset * 0.4)) * 5.0;
-
                     float dist = distance(pos.xy, vec2(uMouse.x * 100.0, -uMouse.y * 100.0 + scrollOffset));
                     float shockwave = 0.0;
                     if (dist < 40.0) {
                         shockwave = sin((dist - timeOffset * 50.0) * 0.5) * exp(-dist * 0.05) * 15.0;
                     }
-
                     pos.z = n1 + n2 + shockwave;
                     vZ = pos.z;
-
                     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
                     gl_Position = projectionMatrix * mvPosition;
                 }
@@ -1350,42 +978,25 @@
                 uniform float uTime;
                 varying float vZ;
                 varying vec2 vUv;
-
                 void main() {
                     vec2 grid = fract(vUv * 150.0);
                     float line = min(grid.x, grid.y);
                     float edge = 1.0 - smoothstep(0.0, 0.08, line);
-
                     vec3 colorBase = vec3(0.01, 0.03, 0.08);
                     vec3 colorHigh = vec3(0.35, 0.48, 0.62);
                     vec3 colorPeak = vec3(0.48, 0.75, 1.0);
-
                     float heightNorm = smoothstep(-10.0, 15.0, vZ);
                     vec3 finalColor = mix(colorBase, colorHigh, heightNorm);
                     finalColor = mix(finalColor, colorPeak, smoothstep(0.7, 1.0, heightNorm));
-
                     float glow = edge * (0.2 + heightNorm * 0.8);
-
                     gl_FragColor = vec4(finalColor + glow * colorPeak, 1.0 - smoothstep(20.0, -10.0, vZ)*0.5);
                 }
             `;
 
             const planeGeo = new THREE.PlaneGeometry(300, 300, 180, 180);
-            const uniforms = {
-                uTime: { value: 0 },
-                uScroll: { value: 0 },
-                uMouse: { value: new THREE.Vector2(0, 0) }
-            };
+            const uniforms = { uTime: { value: 0 }, uScroll: { value: 0 }, uMouse: { value: new THREE.Vector2(0, 0) } };
 
-            const planeMat = new THREE.ShaderMaterial({
-                vertexShader,
-                fragmentShader,
-                uniforms,
-                wireframe: false,
-                transparent: true,
-                side: THREE.DoubleSide
-            });
-
+            const planeMat = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms, wireframe: false, transparent: true, side: THREE.DoubleSide });
             const terrain = new THREE.Mesh(planeGeo, planeMat);
             terrain.rotation.x = -Math.PI / 2 + 0.2;
             terrain.position.y = -10;
@@ -1394,23 +1005,13 @@
             const particlesGeo = new THREE.BufferGeometry();
             const pCount = 5000;
             const pPos = new Float32Array(pCount * 3);
-            for(let i=0; i < pCount * 3; i++) {
-                pPos[i] = (Math.random() - 0.5) * 200;
-            }
+            for(let i=0; i < pCount * 3; i++) pPos[i] = (Math.random() - 0.5) * 200;
             particlesGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-            const particlesMat = new THREE.PointsMaterial({
-                color: 0x5b7a9e,
-                size: 0.3,
-                transparent: true,
-                opacity: 0.6,
-                blending: THREE.AdditiveBlending
-            });
+            const particlesMat = new THREE.PointsMaterial({ color: 0x5b7a9e, size: 0.3, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
             const particleSystem = new THREE.Points(particlesGeo, particlesMat);
             scene.add(particleSystem);
 
-            let mouseX = 0, mouseY = 0;
-            let targetX = 0, targetY = 0;
-            let scrollY = 0;
+            let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0, scrollY = 0;
             let clock = new THREE.Clock();
 
             document.addEventListener('mousemove', (e) => {
@@ -1419,10 +1020,7 @@
                 uniforms.uMouse.value.set(mouseX, mouseY);
             });
 
-            window.addEventListener('scroll', () => {
-                scrollY = window.scrollY;
-                uniforms.uScroll.value = scrollY;
-            });
+            window.addEventListener('scroll', () => { scrollY = window.scrollY; uniforms.uScroll.value = scrollY; }, { passive: true });
 
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -1433,26 +1031,20 @@
             const animate = () => {
                 requestAnimationFrame(animate);
                 const time = clock.getElapsedTime();
-
                 uniforms.uTime.value = time;
-
                 targetX = mouseX * 10;
                 targetY = mouseY * 5;
                 camera.position.x += (targetX - camera.position.x) * 0.02;
                 camera.position.y += (15 + targetY - camera.position.y) * 0.02;
                 camera.lookAt(0, 0, -20);
-
                 particleSystem.rotation.y = time * 0.02;
                 particleSystem.rotation.z = time * 0.01;
-
                 renderer.render(scene, camera);
             };
             animate();
         };
 
-        if (window.innerWidth > 768) {
-            initThreeJS();
-        }
+        if (window.innerWidth > 768) initThreeJS();
 
         async function loadBlogManifest() {
             const statusEl = document.getElementById('blog-telemetry-status');
@@ -1462,13 +1054,11 @@
                 if (!response.ok) throw new Error('Manifest unavailable');
                 const data = await response.json();
                 const latestPost = data[0];
-
                 document.getElementById('blog-node-tag').innerText = `[${latestPost.category}]`;
                 document.getElementById('blog-node-meta-details').innerText = ` ${latestPost.date}`;
                 document.getElementById('blog-node-title').innerText = latestPost.title;
                 document.getElementById('blog-node-excerpt').innerText = latestPost.excerpt;
                 document.getElementById('blog-node-link').href = `https://engineering-logs.pages.dev/post?id=${latestPost.id}`;
-
                 statusEl.style.display = 'none';
                 payloadEl.style.display = 'block';
             } catch (err) {
@@ -1481,13 +1071,7 @@
             document.getElementById('chaos-visitor-display').textContent = '●';
         }
 
-        const v86State = {
-            term: null,
-            fitAddon: null,
-            emulator: null,
-            initialized: false,
-            loading: false,
-        };
+        const v86State = { term: null, fitAddon: null, emulator: null, initialized: false, loading: false };
 
         function loadScript(url) {
             return new Promise((resolve, reject) => {
@@ -1510,19 +1094,161 @@
             });
         }
 
-        /* ------------------------------------------------------------------
-         *  DUAL-FOCUS SYSTEM
-         *  Two independent "focus" states:
-         *    - PAGE MODE     : wheel scrolls the portfolio, keyboard shortcuts
-         *                      work everywhere, terminal is just a live view.
-         *    - TERMINAL MODE : wheel + keys go to the Linux guest.
-         *  Mode is driven by real focus/blur events on the hidden xterm
-         *  textarea. Clicking the terminal enters terminal mode; clicking
-         *  anywhere else (or pressing Escape) returns to page mode.
-         * ---------------------------------------------------------------- */
+        function getAllTerminalText(term) {
+            const buf = term.buffer.active;
+            const lines = [];
+            for (let i = 0; i < buf.length; i++) {
+                const line = buf.getLine(i);
+                if (line) lines.push(line.translateToString(true));
+            }
+            while (lines.length && lines[lines.length - 1] === '') lines.pop();
+            return lines.join('\n');
+        }
+
+        function copyTextToClipboard(text) {
+            if (!text) return Promise.resolve(false);
+            const fallback = () => {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.setAttribute('readonly', '');
+                ta.style.position = 'fixed';
+                ta.style.top = '0';
+                ta.style.left = '0';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                ta.setSelectionRange(0, ta.value.length);
+                let ok = false;
+                try { ok = document.execCommand('copy'); } catch (_) { ok = false; }
+                document.body.removeChild(ta);
+                return ok;
+            };
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(text).then(() => true).catch(() => fallback());
+            }
+            return Promise.resolve(fallback());
+        }
+
+        function copyTerminalContents(term, buttonEl, onlySelection) {
+            if (!term) return;
+            let text;
+            if (onlySelection) {
+                text = term.getSelection();
+                if (!text) return;
+            } else {
+                const sel = term.getSelection();
+                text = (sel && sel.length) ? sel : getAllTerminalText(term);
+            }
+            if (!text) return;
+            copyTextToClipboard(text).then((ok) => {
+                if (!ok || !buttonEl) return;
+                buttonEl.textContent = 'COPIED';
+                buttonEl.classList.add('copied');
+                clearTimeout(buttonEl._t);
+                buttonEl._t = setTimeout(() => {
+                    buttonEl.textContent = 'COPY';
+                    buttonEl.classList.remove('copied');
+                }, 1200);
+            });
+        }
+
+        async function pasteFromClipboard(term) {
+            if (!term) return;
+            try {
+                if (navigator.clipboard && navigator.clipboard.readText) {
+                    const text = await navigator.clipboard.readText();
+                    if (text) term.paste(text);
+                }
+            } catch (_) {}
+        }
+
+        let ctxMenuEl = null;
+
+        function hideCtxMenu() {
+            if (ctxMenuEl && ctxMenuEl.parentNode) ctxMenuEl.parentNode.removeChild(ctxMenuEl);
+            ctxMenuEl = null;
+        }
+
+        function makeCtxItem(label, shortcut, action, disabled) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.tabIndex = -1;
+            if (disabled) btn.classList.add('disabled');
+            const spanLabel = document.createElement('span');
+            spanLabel.textContent = label;
+            btn.appendChild(spanLabel);
+            if (shortcut) {
+                const spanKey = document.createElement('span');
+                spanKey.className = 'ctx-shortcut';
+                spanKey.textContent = shortcut;
+                btn.appendChild(spanKey);
+            }
+            btn.addEventListener('mousedown', (e) => { e.preventDefault(); e.stopPropagation(); });
+            btn.addEventListener('mouseup',  (e) => { e.preventDefault(); e.stopPropagation(); });
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (!disabled && typeof action === 'function') action();
+                hideCtxMenu();
+            });
+            return btn;
+        }
+
+        function makeCtxSeparator() {
+            const sep = document.createElement('div');
+            sep.className = 'ctx-separator';
+            return sep;
+        }
+
+        function showCtxMenu(x, y, term) {
+            hideCtxMenu();
+            const menu = document.createElement('div');
+            menu.className = 'term-ctx-menu';
+            ctxMenuEl = menu;
+
+            const hasSelection = !!(term.getSelection && term.getSelection().length);
+
+            menu.appendChild(makeCtxItem('Copy Selected', 'Ctrl+Shift+C',
+                () => copyTextToClipboard(term.getSelection()), !hasSelection));
+            menu.appendChild(makeCtxItem('Copy All', '',
+                () => copyTextToClipboard(getAllTerminalText(term)), false));
+            menu.appendChild(makeCtxSeparator());
+            menu.appendChild(makeCtxItem('Paste', 'Ctrl+V',
+                () => pasteFromClipboard(term), false));
+            menu.appendChild(makeCtxItem('Select All', '',
+                () => term.selectAll(), false));
+            menu.appendChild(makeCtxSeparator());
+            menu.appendChild(makeCtxItem('Clear', '',
+                () => term.clear(), false));
+
+            menu.style.visibility = 'hidden';
+            document.body.appendChild(menu);
+            const rect = menu.getBoundingClientRect();
+            const px = Math.min(x, window.innerWidth  - rect.width  - 8);
+            const py = Math.min(y, window.innerHeight - rect.height - 8);
+            menu.style.left = Math.max(4, px) + 'px';
+            menu.style.top  = Math.max(4, py) + 'px';
+            menu.style.visibility = 'visible';
+
+            const dismiss = (e) => {
+                if (ctxMenuEl && !ctxMenuEl.contains(e.target)) { hideCtxMenu(); cleanup(); }
+            };
+            const onBlur = () => { hideCtxMenu(); cleanup(); };
+            const cleanup = () => {
+                document.removeEventListener('mousedown', dismiss, true);
+                document.removeEventListener('wheel', dismiss, true);
+                window.removeEventListener('blur', onBlur);
+            };
+            setTimeout(() => {
+                document.addEventListener('mousedown', dismiss, true);
+                document.addEventListener('wheel', dismiss, true);
+                window.addEventListener('blur', onBlur);
+            }, 0);
+        }
+
         function setupTerminalFocus(term, screenEl, termEl) {
-            let mode = 'page';
             const indicator = document.getElementById('focus-indicator');
+            let mode = 'page';
 
             function updateIndicator() {
                 if (!indicator) return;
@@ -1538,115 +1264,43 @@
             }
             updateIndicator();
 
-            // focusin/focusout bubble, unlike focus/blur — perfect here.
-            termEl.addEventListener('focusin', () => {
-                mode = 'terminal';
-                updateIndicator();
-            });
+            termEl.addEventListener('focusin', () => { mode = 'terminal'; updateIndicator(); });
             termEl.addEventListener('focusout', (e) => {
-                if (!termEl.contains(e.relatedTarget)) {
-                    mode = 'page';
-                    updateIndicator();
-                }
+                if (!termEl.contains(e.relatedTarget)) { mode = 'page'; updateIndicator(); }
             });
 
-            // Escape releases the terminal back to page mode.
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && mode === 'terminal') {
-                    if (document.activeElement && document.activeElement.blur) {
-                        document.activeElement.blur();
-                    }
+            termEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
                 }
             }, true);
 
-            // Ctrl+Shift+C copies — works in BOTH modes (terminal selection,
-            // or the whole buffer when nothing is selected). Also stops the
-            // browser's "inspect element" shortcut from hijacking it.
+            document.addEventListener('mousedown', (e) => {
+                if (!termEl.contains(e.target)) {
+                    const ae = document.activeElement;
+                    if (ae && termEl.contains(ae) && typeof ae.blur === 'function') ae.blur();
+                }
+            }, true);
+
+            termEl.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                showCtxMenu(e.clientX, e.clientY, term);
+            });
+
             document.addEventListener('keydown', (e) => {
                 if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) {
                     e.preventDefault();
                     e.stopPropagation();
-                    copyTerminalContents(term);
+                    copyTerminalContents(term, document.getElementById('term-copy-btn'), false);
                 }
             }, true);
 
-            // Wheel routing — the critical fix.
-            // We intercept the wheel at the container in the CAPTURE phase,
-            // before xterm ever sees it, then decide:
-            //   page mode     -> scroll the portfolio
-            //   terminal mode -> scroll the guest scrollback
-            let wheelAccum = 0;
-            const CELL_H = 17;
-            termEl.addEventListener('wheel', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-
-                let dy = e.deltaY;
-                if (e.deltaMode === 1) dy *= CELL_H;                 // lines
-                else if (e.deltaMode === 2) dy *= window.innerHeight; // pages
-
-                if (mode === 'terminal') {
-                    wheelAccum += dy;
-                    const whole = wheelAccum > 0
-                        ? Math.floor(wheelAccum / CELL_H)
-                        : Math.ceil(wheelAccum / CELL_H);
-                    if (whole !== 0) {
-                        wheelAccum -= whole * CELL_H;
-                        term.scrollLines(whole);
-                    }
-                } else {
-                    wheelAccum = 0;
-                    // `behavior: 'auto'` overrides the CSS smooth-scroll
-                    // so wheel scrolling stays snappy, like a real terminal.
-                    window.scrollBy({ top: dy, left: 0, behavior: 'auto' });
-                }
-            }, { capture: true, passive: false });
-
-            // Keep xterm from forwarding our control keys to the guest.
             term.attachCustomKeyEventHandler((e) => {
                 if (e.type !== 'keydown') return true;
                 if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) return false;
-                if (e.key === 'Escape') return false;
                 return true;
             });
-        }
-
-        function copyTerminalContents(term) {
-            const sel = term.getSelection();
-            let text = (sel && sel.length) ? sel : null;
-
-            if (!text) {
-                const buf = term.buffer.active;
-                const lines = [];
-                for (let i = 0; i < buf.length; i++) {
-                    const line = buf.getLine(i);
-                    if (line) lines.push(line.translateToString(true));
-                }
-                while (lines.length && lines[lines.length - 1] === '') lines.pop();
-                text = lines.join('\n');
-            }
-            if (!text) return;
-
-            const fallback = () => {
-                const ta = document.createElement('textarea');
-                ta.value = text;
-                ta.setAttribute('readonly', '');
-                ta.style.position = 'fixed';
-                ta.style.top = '0';
-                ta.style.left = '0';
-                ta.style.opacity = '0';
-                document.body.appendChild(ta);
-                ta.select();
-                ta.setSelectionRange(0, ta.value.length);
-                try { document.execCommand('copy'); } catch (_) {}
-                document.body.removeChild(ta);
-            };
-
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).catch(fallback);
-            } else {
-                fallback();
-            }
         }
 
         async function initV86() {
@@ -1670,15 +1324,15 @@
 
                 const screenEl = document.getElementById('v86-screen');
                 const termEl   = document.getElementById('gh-terminal');
+                const copyBtn  = document.getElementById('term-copy-btn');
+                const hiddenScreen = document.getElementById('v86-hidden-screen');
 
                 const term = new Terminal({
                     fontFamily: "'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace",
                     fontSize: 14,
                     cursorBlink: true,
-                    scrollback: 10000,
+                    scrollback: 5000,
                     convertEol: true,
-                    // Don't yank the viewport to the bottom when the user is
-                    // reading history and taps a key.
                     scrollOnUserInput: true,
                     theme: {
                         background: '#050505',
@@ -1695,8 +1349,14 @@
                 v86State.term = term;
                 v86State.fitAddon = fitAddon;
 
-                // Wire up the two-focus system now that xterm is mounted.
                 setupTerminalFocus(term, screenEl, termEl);
+
+                copyBtn.addEventListener('mousedown', (e) => e.preventDefault());
+                copyBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    copyTerminalContents(term, copyBtn, false);
+                });
 
                 setStatus('booting kernel (6.8.12)...');
 
@@ -1704,6 +1364,12 @@
                     wasm_path: 'v86_assets/v86.wasm',
                     memory_size: 128 * 1024 * 1024,
                     vga_memory_size: 2 * 1024 * 1024,
+
+                    screen_container: hiddenScreen,
+
+                    disable_keyboard: true,
+                    disable_mouse: true,
+                    disable_speaker: true,
 
                     bios:     { url: 'v86_assets/seabios.bin', async: true },
                     vga_bios: { url: 'v86_assets/vgabios.bin', async: true },
@@ -1715,50 +1381,48 @@
                              'earlyprintk=serial,ttyS0,115200 ' +
                              'rdinit=/init acpi=off noapic',
 
-                    disable_speaker: true,
                     autostart: true,
                 });
 
                 v86State.emulator = emulator;
                 window.__tetstack = { emulator };
 
-                /* --------------------------------------------------------------
-                 *  BATCHED SERIAL OUTPUT
-                 *  Writing byte-at-a-time re-rendered the canvas hundreds of
-                 *  times per second during boot, which made the wheel feel
-                 *  sluggish. We coalesce bytes into ~8ms chunks and preserve
-                 *  the reader's scroll position while new output arrives.
-                 * ------------------------------------------------------------ */
                 let outBuf = '';
-                let outTimer = null;
+                let rafScheduled = false;
+                const BUF_TRIM = 24 * 1024;
+                const BUF_KEEP = 16 * 1024;
 
-                const flushOutput = () => {
-                    outTimer = null;
+                function scheduleFlush() {
+                    if (rafScheduled) return;
+                    rafScheduled = true;
+                    requestAnimationFrame(flushOutput);
+                }
+
+                function flushOutput() {
+                    rafScheduled = false;
                     if (!outBuf) return;
-                    const data = outBuf;
+                    let data = outBuf;
                     outBuf = '';
+                    if (data.length > BUF_TRIM) data = data.slice(-BUF_KEEP);
 
-                    const before = term.buffer.active;
-                    const distFromBottom = before.baseY - before.viewportY;
+                    const bufBefore = term.buffer.active;
+                    const distFromBottom = bufBefore.baseY - bufBefore.viewportY;
+                    term.write(data);
 
-                    term.write(data, () => {
-                        if (distFromBottom > 0) {
-                            // User was reading history — keep them pinned there.
+                    if (distFromBottom > 0) {
+                        requestAnimationFrame(() => {
                             const nb = term.buffer.active;
                             const target = Math.max(0, nb.baseY - distFromBottom);
                             if (nb.viewportY !== target) term.scrollToLine(target);
-                        }
-                    });
-                };
-
-                const queueOutput = (str) => {
-                    outBuf += str;
-                    if (outTimer === null) outTimer = setTimeout(flushOutput, 8);
-                    if (outBuf.length > 65536) {
-                        clearTimeout(outTimer);
-                        flushOutput();
+                        });
                     }
-                };
+                }
+
+                function queueOutput(str) {
+                    outBuf += str;
+                    if (outBuf.length > BUF_TRIM * 2) outBuf = outBuf.slice(-BUF_KEEP);
+                    scheduleFlush();
+                }
 
                 emulator.add_listener('serial0-output-byte', (byte) => {
                     const char = String.fromCharCode(byte);
@@ -1767,9 +1431,7 @@
                 });
 
                 term.onData((data) => {
-                    for (let i = 0; i < data.length; i++) {
-                        emulator.serial0_send(data[i]);
-                    }
+                    for (let i = 0; i < data.length; i++) emulator.serial0_send(data[i]);
                 });
 
                 setStatus('● live — serial0 @ 115200');
