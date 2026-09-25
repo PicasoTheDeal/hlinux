@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="A real Linux kernel running in your browser via WebAssembly. i386, BusyBox, serial console — no servers, no containers, just v86 and a WebAssembly emulator.">
     <meta name="author" content="Kirubel (PicasoTheDeal)">
     <meta name="keywords" content="linux, v86, webassembly, wasm, browser linux, x86 emulator, busybox, kernel, terminal, serial console, javascript">
@@ -30,174 +30,639 @@
     <meta name="rating" content="general">
     <link rel="canonical" href="https://tetstack.dev/hlinux/">
 
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23050505'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' fill='%235b7a9e' text-anchor='middle'%3E%26gt;_%3C/text%3E%3C/svg%3E">
-    <title>hlinux</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23050505'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' fill='%23ceff1a' text-anchor='middle'%3E%26gt;_%3C/text%3E%3C/svg%3E">
+    <title>hlinux — Tetstack</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
 
     <style>
-        :root {
-            --bg-primary: #050505;
-            --text-primary: #c9d1d9;
-            --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+        :root{
+            --white:#ffffff;
+            --lime-cream:#e7ff8d;
+            --chartreuse:#ceff1a;
+            --forest-moss:#67800d;
+            --black:#000000;
+
+            --bg:#000000;
+            --fg:#ffffff;
+            --fg-dim:rgba(255,255,255,.62);
+            --fg-faint:rgba(255,255,255,.36);
+            --fg-ghost:rgba(255,255,255,.14);
+            --line:rgba(255,255,255,.14);
+            --line-hi:rgba(255,255,255,.34);
+
+            --font-mono:'JetBrains Mono','SF Mono','Cascadia Code','Consolas',monospace;
+            --font-serif:'Instrument Serif',Georgia,'Times New Roman',serif;
+            --font-pixel:'Press Start 2P',system-ui;
+
+            --ease:cubic-bezier(.22,1,.36,1);
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+        html{height:100%;background:var(--bg);font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+
+        body{
+            min-height:100vh;
+            min-height:100dvh;
+            background:var(--bg);
+            color:var(--fg);
+            font-family:var(--font-mono);
+            font-weight:400;
+            line-height:1.6;
+            letter-spacing:-.005em;
+            display:flex;
+            flex-direction:column;
+            -webkit-tap-highlight-color:transparent;
+            position:relative;
         }
 
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: var(--font-mono);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
+        ::selection{background:var(--chartreuse); color:var(--black);}
+
+        #donut-bg{
+            position:fixed;
+            top:50%;
+            left:50%;
+            transform:translate(-50%, -50%);
+            font-family:var(--font-mono);
+            font-size:clamp(6px, min(1.75vw, 3.6vh), 34px);
+            line-height:1.02;
+            letter-spacing:0;
+            color:rgba(205, 255, 26, 0.7);
+            text-shadow:0 0 14px rgba(206, 255, 26, 0.22);
+            white-space:pre;
+            margin:0;
+            padding:0;
+            pointer-events:none;
+            user-select:none;
+            z-index:0;
+            will-change:contents;
         }
 
-        .glass-terminal {
-            width: 90vw;
-            max-width: 900px;
-            height: 80vh;
-            max-height: 600px;
-            background-color: rgba(5, 7, 10, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(91, 122, 158, 0.3);
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-            position: relative;
+        .topbar{
+            position:relative;
+            z-index:5;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:22px clamp(24px,3.4vw,60px);
+            padding-top:calc(22px + env(safe-area-inset-top, 0));
+            flex-shrink:0;
+            mix-blend-mode:difference;
+        }
+        .wordmark{
+            font-family:var(--font-pixel);
+            font-size:.72rem;
+            letter-spacing:.04em;
+            color:var(--white);
+            text-decoration:none;
+            transition:color .3s var(--ease);
+        }
+        .wordmark:hover{color:var(--chartreuse);}
+        .wordmark .dot{color:var(--chartreuse);}
+        .wordmark:hover .dot{color:var(--white);}
+        .top-meta{
+            display:flex;
+            align-items:center;
+            gap:14px;
+            font-family:var(--font-mono);
+            font-size:.64rem;
+            letter-spacing:.2em;
+            text-transform:uppercase;
+            color:rgba(255,255,255,.55);
+        }
+        .top-meta .sep{color:rgba(255,255,255,.2);}
+        .top-meta .live-tick{
+            display:inline-block;
+            width:5px;
+            height:5px;
+            background:var(--chartreuse);
+            margin-right:7px;
+            vertical-align:middle;
+            animation:tick 2s steps(2,start) infinite;
+        }
+        @keyframes tick{
+            0%,49%{opacity:1;}
+            50%,100%{opacity:.15;}
         }
 
-        .term-header {
-            background-color: rgba(2, 3, 5, 0.9);
-            padding: 10px 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid rgba(91, 122, 158, 0.2);
-            flex-shrink: 0;
+        .stage{
+            position:relative;
+            z-index:2;
+            flex:1;
+            display:flex;
+            flex-direction:column;
+            padding:clamp(20px,3vh,40px) clamp(24px,5.5vw,120px) clamp(20px,3vh,40px);
+            min-height:0;
+            max-width:1440px;
+            width:100%;
+            margin:0 auto;
         }
 
-        .term-buttons {
-            display: flex;
-            gap: 8px;
+        .stage-head{
+            display:flex;
+            align-items:center;
+            gap:16px;
+            margin-bottom:clamp(18px,2.6vh,28px);
+            flex-shrink:0;
+        }
+        .chapter-num{
+            font-family:var(--font-mono);
+            font-size:.64rem;
+            letter-spacing:.2em;
+            color:var(--chartreuse);
+            border:1px solid rgba(206,255,26,.36);
+            padding:4px 10px;
+            line-height:1.4;
+        }
+        .chapter-name{
+            font-family:var(--font-mono);
+            font-size:.64rem;
+            letter-spacing:.26em;
+            text-transform:uppercase;
+            color:var(--fg-faint);
+        }
+        .chapter-line{
+            flex:1;
+            height:1px;
+            background:var(--line);
         }
 
-        .term-buttons span {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
+        .stage-title{
+            font-family:var(--font-serif);
+            font-size:clamp(1.6rem,3.4vw,3rem);
+            font-weight:400;
+            line-height:1.06;
+            letter-spacing:-.02em;
+            color:var(--white);
+            max-width:22ch;
+            margin-bottom:clamp(16px,2vh,26px);
+            flex-shrink:0;
         }
-        .term-buttons span:nth-child(1) { background-color: #ff5f56; }
-        .term-buttons span:nth-child(2) { background-color: #ffbd2e; }
-        .term-buttons span:nth-child(3) { background-color: #27c93f; }
-
-        .term-title {
-            flex: 1;
-            text-align: center;
-            font-size: 0.75rem;
-            color: #b1bac4;
-            letter-spacing: 0.05em;
-        }
-
-        .copy-btn {
-            background: rgba(91, 122, 158, 0.15);
-            border: 1px solid rgba(91, 122, 158, 0.4);
-            color: #b1bac4;
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            font-weight: 500;
-            padding: 4px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            letter-spacing: 0.08em;
-            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-            user-select: none;
-        }
-        .copy-btn:hover {
-            background: rgba(91, 122, 158, 0.3);
-            color: #c9d1d9;
-        }
-        .copy-btn:active {
-            transform: translateY(1px);
-        }
-        .copy-btn.copied {
-            background: rgba(39, 201, 63, 0.18);
-            border-color: rgba(39, 201, 63, 0.6);
-            color: #27c93f;
+        .stage-title em{
+            font-style:italic;
+            color:var(--lime-cream);
         }
 
-        #screen {
-            flex: 1;
-            background: #000;
-            outline: none;
-            overflow: hidden;
-            padding: 6px 8px;
-            cursor: text;
+        .stage-blurb{
+            font-family:var(--font-mono);
+            font-size:.78rem;
+            line-height:1.85;
+            color:var(--fg-dim);
+            max-width:62ch;
+            margin-bottom:clamp(20px,3vh,34px);
+            flex-shrink:0;
         }
 
-        .xterm .xterm-selection div {
-            background-color: rgba(91, 122, 158, 0.45) !important;
+        .terminal{
+            flex:1;
+            min-height:380px;
+            display:flex;
+            flex-direction:column;
+            overflow:hidden;
+            border:1px solid var(--line-hi);
+            background:var(--black);
+            position:relative;
+            transition:border-color .35s var(--ease);
+            box-shadow:0 20px 60px rgba(0,0,0,.75), 0 0 0 1px rgba(0,0,0,.6);
+        }
+        .terminal.is-focused{border-color:var(--chartreuse);}
+
+        .term-header{
+            flex-shrink:0;
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:12px 16px;
+            border-bottom:1px solid var(--line);
+            background:var(--black);
+        }
+        .term-dots{display:flex; gap:6px;}
+        .term-dots span{
+            width:9px;
+            height:9px;
+            border:1px solid var(--line-hi);
+            background:transparent;
+            transition:background .25s var(--ease), border-color .25s var(--ease);
+        }
+        .terminal:hover .term-dots span:nth-child(1){background:var(--white); border-color:var(--white);}
+        .terminal:hover .term-dots span:nth-child(2){background:var(--lime-cream); border-color:var(--lime-cream);}
+        .terminal:hover .term-dots span:nth-child(3){background:var(--chartreuse); border-color:var(--chartreuse);}
+
+        .term-title{
+            flex:1;
+            font-family:var(--font-mono);
+            font-size:.62rem;
+            letter-spacing:.05em;
+            color:var(--fg-faint);
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            text-align:center;
+        }
+
+        .term-copy{
+            flex-shrink:0;
+            background:transparent;
+            border:1px solid var(--line-hi);
+            color:var(--fg-dim);
+            font-family:var(--font-mono);
+            font-size:.58rem;
+            font-weight:600;
+            letter-spacing:.16em;
+            padding:4px 11px;
+            cursor:pointer;
+            user-select:none;
+            transition:all .3s var(--ease);
+        }
+        .term-copy:hover{background:var(--white); border-color:var(--white); color:var(--black);}
+        .term-copy:active{transform:translateY(1px);}
+        .term-copy.copied{background:var(--chartreuse); border-color:var(--chartreuse); color:var(--black);}
+
+        .term-screen{
+            flex:1;
+            background:var(--black);
+            padding:10px 12px;
+            overflow:hidden;
+            min-height:0;
+            position:relative;
+            isolation:isolate;
+            outline:none;
+            cursor:text;
+        }
+        .term-screen .xterm .xterm-selection div{
+            background-color:rgba(206,255,26,.35) !important;
+        }
+        .term-screen .xterm .xterm-viewport{
+            scrollbar-width:thin;
+            scrollbar-color:rgba(255,255,255,.2) transparent;
+            background-color:transparent !important;
+        }
+        .term-screen .xterm .xterm-viewport::-webkit-scrollbar{width:8px;}
+        .term-screen .xterm .xterm-viewport::-webkit-scrollbar-track{background:transparent;}
+        .term-screen .xterm .xterm-viewport::-webkit-scrollbar-thumb{
+            background:rgba(255,255,255,.18);
+            border:2px solid transparent;
+            background-clip:padding-box;
+        }
+        .term-screen .xterm .xterm-viewport::-webkit-scrollbar-thumb:hover{
+            background:rgba(255,255,255,.35);
+            background-clip:padding-box;
+        }
+
+        .term-status{
+            flex-shrink:0;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            padding:8px 14px;
+            border-top:1px solid var(--line);
+            font-family:var(--font-mono);
+            font-size:.58rem;
+            letter-spacing:.08em;
+            color:var(--fg-faint);
+            text-transform:uppercase;
+        }
+        .term-status .tick{
+            display:inline-block;
+            width:5px;
+            height:5px;
+            background:var(--chartreuse);
+            margin-right:7px;
+            vertical-align:middle;
+            animation:tick 2s steps(2,start) infinite;
+        }
+        .focus-indicator{
+            padding:2px 8px;
+            font-size:.55rem;
+            font-weight:600;
+            letter-spacing:.1em;
+            white-space:nowrap;
+            border:1px solid var(--line);
+            color:var(--fg-faint);
+            transition:all .3s var(--ease);
+        }
+        .focus-indicator.terminal-mode{
+            color:var(--black);
+            background:var(--chartreuse);
+            border-color:var(--chartreuse);
+        }
+
+        .stage-foot{
+            flex-shrink:0;
+            margin-top:clamp(16px,2.4vh,26px);
+            display:flex;
+            flex-wrap:wrap;
+            gap:12px 28px;
+            padding-top:16px;
+            border-top:1px solid var(--line);
+        }
+        .foot-item{
+            font-family:var(--font-mono);
+            font-size:.58rem;
+            letter-spacing:.06em;
+            color:var(--fg-faint);
+            display:inline-flex;
+            align-items:center;
+            gap:7px;
+            text-transform:uppercase;
+        }
+        .foot-item i{color:var(--forest-moss); font-size:.8rem;}
+        .foot-item a{
+            color:var(--lime-cream);
+            text-decoration:none;
+            border-bottom:1px solid transparent;
+            transition:border-color .3s var(--ease);
+        }
+        .foot-item a:hover{border-bottom-color:var(--chartreuse);}
+
+        .bottom-nav{
+            flex-shrink:0;
+            position:relative;
+            z-index:5;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:16px;
+            padding:18px clamp(24px,3.4vw,60px);
+            padding-bottom:calc(18px + env(safe-area-inset-bottom, 0));
+            border-top:1px solid var(--line);
+            background:rgba(0,0,0,.72);
+            backdrop-filter:blur(8px);
+            -webkit-backdrop-filter:blur(8px);
+        }
+        .nav-back{
+            font-family:var(--font-mono);
+            font-size:.6rem;
+            letter-spacing:.16em;
+            text-transform:uppercase;
+            color:rgba(255,255,255,.42);
+            text-decoration:none;
+            display:inline-flex;
+            align-items:center;
+            gap:10px;
+            transition:color .3s var(--ease);
+        }
+        .nav-back:hover{color:var(--chartreuse);}
+        .nav-back .nav-arrow{
+            font-size:.9rem;
+            transition:transform .4s var(--ease);
+        }
+        .nav-back:hover .nav-arrow{transform:translateX(-4px);}
+        .nav-meta{
+            font-family:var(--font-mono);
+            font-size:.58rem;
+            letter-spacing:.16em;
+            text-transform:uppercase;
+            color:var(--fg-faint);
+        }
+        .nav-meta .brand{color:var(--lime-cream);}
+
+        @media (max-width:820px){
+            .topbar{padding:16px 18px; padding-top:calc(16px + env(safe-area-inset-top, 0));}
+            .wordmark{font-size:.62rem;}
+            .top-meta{display:none;}
+
+            .stage{padding:20px 18px 20px;}
+            .stage-head{margin-bottom:16px;}
+            .chapter-name{display:none;}
+            .stage-title{font-size:clamp(1.4rem,7vw,2rem); max-width:100%;}
+            .stage-blurb{font-size:.72rem; max-width:100%; margin-bottom:16px;}
+
+            .terminal{min-height:320px;}
+            .term-title{font-size:.55rem;}
+
+            .focus-indicator{display:none;}
+
+            .bottom-nav{padding:14px 18px; padding-bottom:calc(14px + env(safe-area-inset-bottom, 0));}
+            .nav-back{font-size:.55rem; letter-spacing:.1em; gap:8px;}
+            .nav-meta{font-size:.52rem;}
+        }
+
+        @media (max-height:640px){
+            .stage-title{margin-bottom:12px;}
+            .stage-blurb{display:none;}
+            .terminal{min-height:260px;}
         }
     </style>
 </head>
 <body>
 
-    <div id="gh-terminal" class="glass-terminal">
-        <div class="term-header">
-            <div class="term-buttons">
-                <span></span><span></span><span></span>
-            </div>
-            <div class="term-title">root@tetstack-core:~ (i386 &middot; busybox &middot; real kernel)</div>
-            <button id="copy-btn" class="copy-btn" type="button"
-                    title="Copy full terminal contents (Ctrl+Shift+C)">COPY</button>
+    <pre id="donut-bg" aria-hidden="true"></pre>
+
+    <header class="topbar">
+        <a href="/" class="wordmark">TETSTACK<span class="dot">.</span></a>
+        <span class="top-meta">
+            <span><span class="live-tick"></span>hlinux — live</span>
+            <span class="sep">/</span>
+            <span>experiment 001</span>
+        </span>
+    </header>
+
+    <main class="stage">
+        <div class="stage-head">
+            <span class="chapter-num">EXPERIMENT</span>
+            <span class="chapter-name">Linux in the browser</span>
+            <span class="chapter-line"></span>
         </div>
-        <div id="screen" tabindex="0"></div>
-    </div>
+
+        <h1 class="stage-title">
+            A real <em>Linux kernel,</em> running on WebAssembly.
+        </h1>
+
+        <p class="stage-blurb">
+            No servers. No containers. No backend. Just v86 emulating an i386 CPU in your browser, booting
+            a real kernel with BusyBox userspace over a serial console. Everything below happens on your
+            machine — the network only ever loaded the emulator.
+        </p>
+
+        <div class="terminal" id="gh-terminal">
+            <div class="term-header">
+                <div class="term-dots"><span></span><span></span><span></span></div>
+                <div class="term-title">root@tetstack-core:~ (i386 · busybox · real kernel)</div>
+                <button id="copy-btn" class="term-copy" type="button"
+                        title="Copy full terminal contents (Ctrl+Shift+C)">COPY</button>
+            </div>
+            <div id="screen" class="term-screen" tabindex="0"></div>
+            <div class="term-status">
+                <span id="status"><span class="tick"></span>booting emulator…</span>
+                <span id="focus-indicator" class="focus-indicator">CLICK TO TYPE</span>
+            </div>
+        </div>
+
+        <div class="stage-foot">
+            <span class="foot-item"><i class="bi bi-cpu"></i>i386 · 128 MB RAM</span>
+            <span class="foot-item"><i class="bi bi-hdd-network"></i>serial0 @ 115200 baud</span>
+            <span class="foot-item"><i class="bi bi-box"></i>busybox initramfs</span>
+            <span class="foot-item"><i class="bi bi-lightning-charge"></i>v86 + WebAssembly</span>
+            <span class="foot-item"><i class="bi bi-github"></i>
+                <a href="https://github.com/PicasoTheDeal" target="_blank" rel="noopener noreferrer">PicasoTheDeal</a>
+            </span>
+        </div>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="/" class="nav-back">
+            <span class="nav-arrow">←</span>
+            <span>back to portfolio</span>
+        </a>
+        <span class="nav-meta"><span class="brand">hlinux</span> · v1.0 · 2026</span>
+    </nav>
 
     <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
 
     <script>
+        (function initDonutBackground(){
+            const pre = document.getElementById('donut-bg');
+            if (!pre) return;
+
+            const W = 80, H = 22;
+            const K1_X = 30, K1_Y = 15;
+            const K2 = 5;
+            const R1 = 1, R2 = 2;
+            const THETA_STEP = 0.07;
+            const PHI_STEP = 0.02;
+            const SHADES = '.,-~:;=!*#$@';
+            const SHADES_LAST = SHADES.length - 1;
+            const TWO_PI = 6.28;
+
+            const buffer = new Array(W * H);
+            const zbuf = new Float32Array(W * H);
+            const rowParts = new Array(H);
+
+            let A = 0, B = 0;
+            let rafId = null;
+
+            function frame(){
+                const cosA = Math.cos(A), sinA = Math.sin(A);
+                const cosB = Math.cos(B), sinB = Math.sin(B);
+
+                for (let i = 0; i < W * H; i++){ buffer[i] = ' '; zbuf[i] = 0; }
+
+                for (let theta = 0; theta < TWO_PI; theta += THETA_STEP){
+                    const ct = Math.cos(theta), st = Math.sin(theta);
+                    for (let phi = 0; phi < TWO_PI; phi += PHI_STEP){
+                        const cp = Math.cos(phi), sp = Math.sin(phi);
+                        const cx = R2 + R1 * ct;
+                        const cy = R1 * st;
+
+                        const x = cx * (cosB * cp + sinA * sinB * sp) - cy * cosA * sinB;
+                        const y = cx * (sinB * cp - sinA * cosB * sp) + cy * cosA * cosB;
+                        const z = K2 + cosA * cx * sp + cy * sinA;
+                        const ooz = 1 / z;
+
+                        const xp = (W / 2 + K1_X * ooz * x) | 0;
+                        const yp = (H / 2 - K1_Y * ooz * y) | 0;
+
+                        const L = cp * ct * sinB - cosA * ct * sp - sinA * st +
+                                  cosB * (cosA * st - ct * sinA * sp);
+
+                        if (L > 0 && xp >= 0 && xp < W && yp >= 0 && yp < H){
+                            const idx = xp + W * yp;
+                            if (ooz > zbuf[idx]){
+                                zbuf[idx] = ooz;
+                                const li = (L * 8) | 0;
+                                buffer[idx] = SHADES[li < 0 ? 0 : li > SHADES_LAST ? SHADES_LAST : li];
+                            }
+                        }
+                    }
+                }
+
+                for (let j = 0; j < H; j++){
+                    rowParts[j] = buffer.slice(j * W, (j + 1) * W).join('');
+                }
+                pre.textContent = rowParts.join('\n');
+
+                A += 0.04;
+                B += 0.02;
+                rafId = requestAnimationFrame(frame);
+            }
+
+            function start(){
+                if (rafId === null) rafId = requestAnimationFrame(frame);
+            }
+            function stop(){
+                if (rafId !== null){ cancelAnimationFrame(rafId); rafId = null; }
+            }
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) stop();
+                else start();
+            });
+
+            start();
+        })();
+
         window.addEventListener('DOMContentLoaded', () => {
-            const screen   = document.getElementById('screen');
+            const screenEl = document.getElementById('screen');
+            const termEl   = document.getElementById('gh-terminal');
             const copyBtn  = document.getElementById('copy-btn');
+            const statusEl = document.getElementById('status');
+            const focusInd = document.getElementById('focus-indicator');
+
+            const setStatus = (text) => {
+                statusEl.innerHTML = '<span class="tick"></span>' + text;
+            };
 
             const term = new Terminal({
                 fontFamily: "'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace",
-                fontSize: 14,
+                fontSize: 13,
                 cursorBlink: true,
                 scrollback: 10000,
                 convertEol: true,
+                scrollOnUserInput: true,
                 theme: {
-                    background: '#050505',
-                    foreground: '#c9d1d9',
-                    cursor: '#c9d1d9',
-                    selectionBackground: 'rgba(91, 122, 158, 0.45)'
+                    background: '#000000',
+                    foreground: '#ffffff',
+                    cursor: '#ceff1a',
+                    cursorAccent: '#000000',
+                    selectionBackground: 'rgba(206,255,26,0.35)',
+                    black: '#000000',
+                    white: '#ffffff',
+                    brightWhite: '#ffffff'
                 }
             });
 
             const fitAddon = new FitAddon.FitAddon();
             term.loadAddon(fitAddon);
-            term.open(screen);
+            term.open(screenEl);
             fitAddon.fit();
 
-            window.addEventListener('resize', () => fitAddon.fit());
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => { try { fitAddon.fit(); } catch(_){} }, 100);
+            });
 
+            termEl.addEventListener('focusin', () => {
+                focusInd.textContent = 'ESC TO RELEASE';
+                focusInd.classList.add('terminal-mode');
+                termEl.classList.add('is-focused');
+            });
+            termEl.addEventListener('focusout', (e) => {
+                if (!termEl.contains(e.relatedTarget)){
+                    focusInd.textContent = 'CLICK TO TYPE';
+                    focusInd.classList.remove('terminal-mode');
+                    termEl.classList.remove('is-focused');
+                }
+            });
+            termEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && document.activeElement && document.activeElement.blur){
+                    document.activeElement.blur();
+                }
+            }, true);
 
-
-            function getTerminalText() {
+            function getTerminalText(){
                 const buf = term.buffer.active;
                 const lines = [];
-                for (let i = 0; i < buf.length; i++) {
+                for (let i = 0; i < buf.length; i++){
                     const line = buf.getLine(i);
                     if (line) lines.push(line.translateToString(true));
                 }
@@ -205,7 +670,7 @@
                 return lines.join('\n');
             }
 
-            function legacyCopy(text) {
+            function legacyCopy(text){
                 const ta = document.createElement('textarea');
                 ta.value = text;
                 ta.setAttribute('readonly', '');
@@ -222,21 +687,20 @@
                 return ok;
             }
 
-            function copyTerminal() {
+            function copyTerminal(){
                 const selection = term.getSelection();
                 const text = selection && selection.length ? selection : getTerminalText();
-
+                if (!text) return;
                 const onSuccess = () => {
-                    const original = copyBtn.textContent;
                     copyBtn.textContent = 'COPIED';
                     copyBtn.classList.add('copied');
-                    setTimeout(() => {
-                        copyBtn.textContent = original;
+                    clearTimeout(copyBtn._t);
+                    copyBtn._t = setTimeout(() => {
+                        copyBtn.textContent = 'COPY';
                         copyBtn.classList.remove('copied');
                     }, 1200);
                 };
-
-                if (navigator.clipboard && window.isSecureContext) {
+                if (navigator.clipboard && window.isSecureContext){
                     navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
                         if (legacyCopy(text)) onSuccess();
                     });
@@ -245,29 +709,35 @@
                 }
             }
 
+            copyBtn.addEventListener('mousedown', (e) => e.preventDefault());
             copyBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 copyTerminal();
-                term.focus();
+                try { term.focus(); } catch (_) {}
             });
 
             term.attachCustomKeyEventHandler((e) => {
                 if (e.type === 'keydown' && e.ctrlKey && e.shiftKey
-                    && (e.key === 'C' || e.key === 'c')) {
+                    && (e.key === 'C' || e.key === 'c')){
                     copyTerminal();
                     return false;
                 }
                 return true;
             });
 
+            setStatus('loading emulator core…');
             const s = document.createElement('script');
             s.src = 'v86_assets/libv86.js';
             s.onload = () => {
                 const V86Ctor = window.V86 || window.V86Starter;
-                if (!V86Ctor) {
+                if (!V86Ctor){
                     console.error('[tetstack] libv86.js loaded but no V86 constructor found');
+                    setStatus('error — v86 missing');
+                    term.write('\r\n\x1b[31m[error]\x1b[0m v86 constructor not found.\r\n');
                     return;
                 }
+
+                setStatus('booting kernel…');
 
                 const emulator = new V86Ctor({
                     wasm_path: 'v86_assets/v86.wasm',
@@ -290,23 +760,62 @@
 
                 window.__tetstack = { emulator };
 
+                let outBuf = '';
+                let rafScheduled = false;
+                const BUF_TRIM = 24 * 1024;
+                const BUF_KEEP = 16 * 1024;
+
+                function scheduleFlush(){
+                    if (rafScheduled) return;
+                    rafScheduled = true;
+                    requestAnimationFrame(flushOutput);
+                }
+                function flushOutput(){
+                    rafScheduled = false;
+                    if (!outBuf) return;
+                    let data = outBuf;
+                    outBuf = '';
+                    if (data.length > BUF_TRIM) data = data.slice(-BUF_KEEP);
+
+                    const bufBefore = term.buffer.active;
+                    const distFromBottom = bufBefore.baseY - bufBefore.viewportY;
+                    term.write(data);
+
+                    if (distFromBottom > 0){
+                        requestAnimationFrame(() => {
+                            const nb = term.buffer.active;
+                            const target = Math.max(0, nb.baseY - distFromBottom);
+                            if (nb.viewportY !== target) term.scrollToLine(target);
+                        });
+                    }
+                }
+                function queueOutput(str){
+                    outBuf += str;
+                    if (outBuf.length > BUF_TRIM * 2) outBuf = outBuf.slice(-BUF_KEEP);
+                    scheduleFlush();
+                }
+
                 emulator.add_listener('serial0-output-byte', (byte) => {
                     const char = String.fromCharCode(byte);
-                    if (char !== '\r') term.write(char);
+                    if (char === '\r') return;
+                    queueOutput(char);
                 });
 
                 term.onData((data) => {
-                    for (let i = 0; i < data.length; i++) {
+                    for (let i = 0; i < data.length; i++){
                         emulator.serial0_send(data[i]);
                     }
                 });
 
-                term.focus();
+                setStatus('live — serial0 @ 115200');
+                setTimeout(() => { try { fitAddon.fit(); } catch(_){} }, 200);
+                try { term.focus(); } catch (_) {}
             };
 
             s.onerror = () => {
                 console.error('[tetstack] failed to load v86_assets/libv86.js');
-                term.write('\r\n[error] Failed to load v86 library.\r\n');
+                setStatus('error — library failed');
+                term.write('\r\n\x1b[31m[error]\x1b[0m Failed to load v86 library.\r\n');
             };
             document.head.appendChild(s);
         });
